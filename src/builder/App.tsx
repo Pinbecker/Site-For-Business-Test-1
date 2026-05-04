@@ -4,7 +4,6 @@ import { SCHEMA_VERSION } from '@/types/project';
 import { newSeed } from '@/engine/random';
 import { buildZip, downloadBlob } from '@/engine/export';
 import { suggestTemplate } from '@/engine/render';
-import { COMPOSABLE_PRESETS } from '@/templates/composable';
 import { defaultProject } from './defaults';
 import { hydrateProject } from './projectMigration';
 import { loadAutosave, saveAutosave } from './storage';
@@ -135,11 +134,7 @@ export function App() {
   }, []);
 
   const selectTemplate = useCallback((id: TemplateId) => {
-    setProject((p) => ({
-      ...p,
-      templateId: id,
-      design: { ...p.design, ...COMPOSABLE_PRESETS[id].design },
-    }));
+    setProject((p) => ({ ...p, templateId: id }));
   }, []);
 
   const savedLabel = useMemo(() => formatSavedAgo(savedAt), [savedAt]);
@@ -253,7 +248,6 @@ export function App() {
                 <TemplateSection
                   project={project}
                   selectTemplate={selectTemplate}
-                  updateDesign={(patch) => update('design', patch)}
                   reshuffle={reshuffle}
                 />
               ) : null}

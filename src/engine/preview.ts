@@ -11,7 +11,7 @@ import { deriveOgImage } from './seo';
  * substituting the asset paths the templates emit.
  */
 export function renderPreview(project: SiteProject): string {
-  const tpl = TEMPLATES[project.templateId] ?? TEMPLATES['classic-trade'];
+  const tpl = TEMPLATES[project.templateId] ?? TEMPLATES['service-pro'];
   const css = SHARED_CSS + '\n' + tpl.css(project);
   const og = deriveOgImage(project);
 

@@ -3,7 +3,12 @@ import { CLIENT_JS } from './clientScript';
 import { SHARED_CSS } from './sharedCss';
 import { minifyCss, minifyJs } from './minify';
 import { renderHead, renderRobots, renderSitemap, deriveOgImage, imagePath } from './seo';
-import { COMPOSABLE_PRESETS, createComposableTemplate } from '@/templates/composable';
+import {
+  TEMPLATE_EXPERT,
+  TEMPLATE_HOSPITALITY,
+  TEMPLATE_PORTFOLIO,
+  TEMPLATE_SERVICE_PRO,
+} from '@/templates/realTemplates';
 
 export interface TemplateModule {
   meta: TemplateMeta;
@@ -14,18 +19,10 @@ export interface TemplateModule {
 }
 
 export const TEMPLATES: Record<TemplateId, TemplateModule> = {
-  'classic-trade': createComposableTemplate(COMPOSABLE_PRESETS['classic-trade']),
-  'editorial-cafe': createComposableTemplate(COMPOSABLE_PRESETS['editorial-cafe']),
-  'studio-grid': createComposableTemplate(COMPOSABLE_PRESETS['studio-grid']),
-  'bold-fitness': createComposableTemplate(COMPOSABLE_PRESETS['bold-fitness']),
-  'executive-consulting': createComposableTemplate(COMPOSABLE_PRESETS['executive-consulting']),
-  'boutique-salon': createComposableTemplate(COMPOSABLE_PRESETS['boutique-salon']),
-  'corporate-grid': createComposableTemplate(COMPOSABLE_PRESETS['corporate-grid']),
-  'performance-pro': createComposableTemplate(COMPOSABLE_PRESETS['performance-pro']),
-  'neon-dark': createComposableTemplate(COMPOSABLE_PRESETS['neon-dark']),
-  'luxury-minimal': createComposableTemplate(COMPOSABLE_PRESETS['luxury-minimal']),
-  'retro-americana': createComposableTemplate(COMPOSABLE_PRESETS['retro-americana']),
-  'brutalist-news': createComposableTemplate(COMPOSABLE_PRESETS['brutalist-news']),
+  'service-pro': TEMPLATE_SERVICE_PRO,
+  'hospitality-editorial': TEMPLATE_HOSPITALITY,
+  'portfolio-studio': TEMPLATE_PORTFOLIO,
+  'expert-firm': TEMPLATE_EXPERT,
 };
 
 export const TEMPLATE_LIST: TemplateMeta[] = Object.values(TEMPLATES).map((t) => t.meta);
@@ -35,7 +32,7 @@ export function suggestTemplate(industry: Industry): TemplateId {
   for (const t of Object.values(TEMPLATES)) {
     if (t.meta.bestFor.includes(industry)) return t.meta.id;
   }
-  return 'classic-trade';
+  return 'service-pro';
 }
 
 export interface RenderedSite {
@@ -58,7 +55,7 @@ export interface RenderedSite {
 }
 
 export function renderSite(project: SiteProject): RenderedSite {
-  const tpl = TEMPLATES[project.templateId] ?? TEMPLATES['classic-trade'];
+  const tpl = TEMPLATES[project.templateId] ?? TEMPLATES['service-pro'];
   const og = deriveOgImage(project);
 
   const css = SHARED_CSS + '\n' + tpl.css(project);

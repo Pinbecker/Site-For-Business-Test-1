@@ -1,100 +1,30 @@
-import type { DesignSettings, SiteProject, TemplateId } from '@/types/project';
+import type { SiteProject, TemplateId } from '@/types/project';
 import { SCHEMA_VERSION } from '@/types/project';
-import { defaultDesignSettings, defaultProject } from './defaults';
+import { defaultProject } from './defaults';
 
-const LEGACY_TEMPLATE_TO_DESIGN: Partial<Record<TemplateId, Partial<DesignSettings>>> = {
-  'classic-trade': {
-    mood: 'assured',
-    fontStyle: 'modern',
-    heroLayout: 'service-led',
-    serviceLayout: 'cards',
-  },
-  'editorial-cafe': {
-    mood: 'warm',
-    fontStyle: 'editorial',
-    heroLayout: 'editorial',
-    serviceLayout: 'price-menu',
-    galleryLayout: 'masonry',
-  },
-  'studio-grid': {
-    mood: 'crisp',
-    fontStyle: 'technical',
-    heroLayout: 'poster',
-    sectionLayout: 'feature',
-    galleryLayout: 'showcase',
-  },
-  'bold-fitness': {
-    mood: 'expressive',
-    fontStyle: 'technical',
-    heroLayout: 'poster',
-    density: 'compact',
-    contrast: 'high',
-  },
-  'executive-consulting': {
-    mood: 'assured',
-    fontStyle: 'classic',
-    heroLayout: 'split',
-    navStyle: 'centered',
-    depthStyle: 'flat',
-  },
-  'boutique-salon': {
-    mood: 'premium',
-    fontStyle: 'editorial',
-    heroLayout: 'stacked',
-    galleryLayout: 'masonry',
-  },
-  'corporate-grid': {
-    mood: 'crisp',
-    fontStyle: 'modern',
-    sectionLayout: 'compact',
-    serviceLayout: 'feature-grid',
-  },
-  'performance-pro': {
-    mood: 'expressive',
-    fontStyle: 'technical',
-    heroLayout: 'service-led',
-    serviceLayout: 'feature-grid',
-    contrast: 'high',
-  },
-  'neon-dark': {
-    mood: 'expressive',
-    fontStyle: 'technical',
-    contrast: 'high',
-    depthStyle: 'elevated',
-  },
-  'luxury-minimal': {
-    mood: 'premium',
-    fontStyle: 'editorial',
-    heroLayout: 'split',
-    sectionLayout: 'spacious',
-    depthStyle: 'flat',
-  },
-  'retro-americana': {
-    mood: 'playful',
-    fontStyle: 'friendly',
-    heroLayout: 'poster',
-    cornerStyle: 'sharp',
-  },
-  'brutalist-news': {
-    mood: 'crisp',
-    fontStyle: 'technical',
-    heroLayout: 'editorial',
-    cornerStyle: 'sharp',
-    contrast: 'high',
-    depthStyle: 'flat',
-  },
+const LEGACY_TEMPLATE_TO_NEW: Record<string, TemplateId> = {
+  'classic-trade': 'service-pro',
+  'bold-fitness': 'service-pro',
+  'corporate-grid': 'service-pro',
+  'performance-pro': 'service-pro',
+  'editorial-cafe': 'hospitality-editorial',
+  'boutique-salon': 'hospitality-editorial',
+  'retro-americana': 'hospitality-editorial',
+  'studio-grid': 'portfolio-studio',
+  'neon-dark': 'portfolio-studio',
+  'executive-consulting': 'expert-firm',
+  'luxury-minimal': 'expert-firm',
+  'brutalist-news': 'expert-firm',
 };
 
 export function hydrateProject(input: SiteProject): SiteProject {
   const fallback = defaultProject();
-  const defaults = defaultDesignSettings();
-  const legacy = LEGACY_TEMPLATE_TO_DESIGN[input.templateId] ?? {};
-  const design = { ...defaults, ...legacy, ...(input.design ?? {}) };
-  design.sectionOrder = mergeSectionOrder(input.design?.sectionOrder, defaults.sectionOrder);
+  const templateId = normalizeTemplateId(String(input.templateId));
 
   return {
     ...input,
     schemaVersion: SCHEMA_VERSION,
+    templateId,
     project: {
       ...fallback.project,
       customerName: input.project?.customerName || input.business?.name || fallback.project.customerName,
@@ -113,17 +43,17 @@ export function hydrateProject(input: SiteProject): SiteProject {
         ...input.content?.social,
       },
     },
-    design,
   };
 }
 
-function mergeSectionOrder(
-  saved: DesignSettings['sectionOrder'] | undefined,
-  defaults: DesignSettings['sectionOrder'],
-): DesignSettings['sectionOrder'] {
-  const next = saved?.length ? saved.slice() : defaults.slice();
-  for (const id of defaults) {
-    if (!next.includes(id)) next.push(id);
+function normalizeTemplateId(value: string): TemplateId {
+  if (
+    value === 'service-pro' ||
+    value === 'hospitality-editorial' ||
+    value === 'portfolio-studio' ||
+    value === 'expert-firm'
+  ) {
+    return value;
   }
-  return next.filter((id, index) => next.indexOf(id) === index);
+  return LEGACY_TEMPLATE_TO_NEW[value] ?? 'service-pro';
 }

@@ -1,7 +1,6 @@
 import type {
   AreaServed,
   CredentialItem,
-  DesignSettings,
   FaqItem,
   FeatureItem,
   OpeningHours,
@@ -64,46 +63,6 @@ export function newAreaServed(): AreaServed {
   return { id: newId('are'), name: '' };
 }
 
-export function defaultDesignSettings(): DesignSettings {
-  return {
-    mood: 'assured',
-    fontStyle: 'modern',
-    heroLayout: 'split',
-    navStyle: 'utility',
-    sectionLayout: 'balanced',
-    serviceLayout: 'cards',
-    galleryLayout: 'grid',
-    testimonialLayout: 'cards',
-    contactLayout: 'split',
-    cornerStyle: 'soft',
-    depthStyle: 'subtle',
-    density: 'comfortable',
-    contrast: 'standard',
-    sectionOrder: [
-      'about',
-      'features',
-      'services',
-      'products',
-      'process',
-      'gallery',
-      'team',
-      'credentials',
-      'areas',
-      'promotion',
-      'testimonials',
-      'faqs',
-      'contact',
-    ],
-    showStats: true,
-    showBadges: true,
-    showPricing: true,
-    heroImageFirst: false,
-    stickyCta: true,
-    ctaLabel: 'Get a quote',
-    secondaryCtaLabel: 'View services',
-  };
-}
-
 export function defaultProject(): SiteProject {
   const now = new Date().toISOString();
   return {
@@ -117,9 +76,8 @@ export function defaultProject(): SiteProject {
         'Internal notes for this client project. Use this for reminders, client preferences, revision notes, or deployment details.',
       status: 'draft',
     },
-    templateId: 'classic-trade',
+    templateId: 'service-pro',
     randomization: { seed: newSeed() },
-    design: defaultDesignSettings(),
     business: {
       name: 'Acme Local',
       tagline: 'Trusted local service for your home and business.',
