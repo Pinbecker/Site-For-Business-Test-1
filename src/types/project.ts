@@ -132,7 +132,15 @@ export interface Seo {
   canonicalUrl: string;
 }
 
-export type TemplateId = 'classic-trade' | 'editorial-cafe' | 'studio-grid' | 'bold-fitness';
+export type TemplateId =
+  | 'classic-trade'
+  | 'editorial-cafe'
+  | 'studio-grid'
+  | 'bold-fitness'
+  | 'executive-consulting'
+  | 'boutique-salon'
+  | 'corporate-grid'
+  | 'performance-pro';
 
 export interface RandomizationSeed {
   /** Numeric seed used by the templates' deterministic randomizer. */
