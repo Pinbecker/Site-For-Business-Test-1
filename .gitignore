@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+.vite/
+*.tsbuildinfo
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.log
+
+# Local secrets (none expected, but just in case)
+.env
+.env.local
+.env.*.local
+
+# SiteForge — exported sites and ad-hoc projects.
+# Built from the builder; should not be committed to the source repo.
+exports/
+*.project.json
