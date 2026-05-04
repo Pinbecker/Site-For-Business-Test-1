@@ -1,12 +1,12 @@
 /**
  * Vanilla JS bundled into every generated site.
- * Handles: mobile nav toggle, lightbox, contact form courtesy validation.
+ * Handles: mobile nav toggle, header scroll state, lightbox, scroll reveals with stagger.
  * No dependencies. Self-contained.
  */
 export const CLIENT_JS = `(function(){
   'use strict';
 
-  // Mobile nav toggle
+  /* ── Mobile nav toggle ── */
   var navToggle = document.querySelector('[data-nav-toggle]');
   var nav = document.querySelector('[data-nav]');
   if (navToggle && nav) {
@@ -23,7 +23,17 @@ export const CLIENT_JS = `(function(){
     });
   }
 
-  // Smooth scroll for in-page anchors
+  /* ── Header scroll state ── */
+  var header = document.querySelector('[data-header]');
+  if (header) {
+    var onScroll = function () {
+      header.setAttribute('data-scrolled', window.scrollY > 40 ? 'true' : 'false');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ── Smooth scroll for in-page anchors ── */
   document.querySelectorAll('a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       var id = a.getAttribute('href');
@@ -37,7 +47,7 @@ export const CLIENT_JS = `(function(){
     });
   });
 
-  // Lightbox
+  /* ── Lightbox ── */
   var galleryImgs = document.querySelectorAll('[data-lightbox] img');
   if (galleryImgs.length) {
     var overlay = document.createElement('div');
@@ -73,6 +83,7 @@ export const CLIENT_JS = `(function(){
       img.addEventListener('click', function () { show(i); });
       img.setAttribute('role', 'button');
       img.setAttribute('tabindex', '0');
+      img.style.cursor = 'zoom-in';
       img.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(i); }
       });
@@ -89,16 +100,21 @@ export const CLIENT_JS = `(function(){
     });
   }
 
-  // Reveal-on-scroll
+  /* ── Scroll reveal with stagger ── */
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.setAttribute('data-revealed', 'true');
-          io.unobserve(entry.target);
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var delay = el.getAttribute('data-delay') || '0';
+        if (delay && delay !== '0') {
+          setTimeout(function () { el.setAttribute('data-revealed', 'true'); }, parseInt(delay, 10));
+        } else {
+          el.setAttribute('data-revealed', 'true');
         }
+        io.unobserve(el);
       });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
     document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
   } else {
     document.querySelectorAll('[data-reveal]').forEach(function (el) {
@@ -106,8 +122,9 @@ export const CLIENT_JS = `(function(){
     });
   }
 
-  // Year in footer
+  /* ── Year in footer ── */
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = String(new Date().getFullYear());
+
 })();
 `;
