@@ -90,11 +90,11 @@ section{padding-block:clamp(3rem,7vw,6rem);position:relative}
 .site-header__inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:rgba(10,10,12,.7);backdrop-filter:blur(10px);padding:.75rem 1rem;border:1px solid rgba(255,255,255,.08);border-radius:0}
 .brand-mark{font-family:${f.head};font-size:1.25rem;letter-spacing:.05em;text-transform:uppercase}
 .brand-mark img{max-height:36px;width:auto;filter:brightness(0) invert(1)}
-[data-nav]{position:fixed;inset:0;background:var(--color-bg);padding:5rem var(--pad);transform:translateX(100%);transition:transform .3s ease;z-index:40}
-[data-nav][data-open="true"]{transform:none}
+[data-nav]{display:none;position:fixed;inset:0;background:var(--color-bg);padding:5rem var(--pad);transform:translateX(100%);transition:transform .3s ease;z-index:40;visibility:hidden;pointer-events:none}
+[data-nav][data-open="true"]{display:block;transform:none;visibility:visible;pointer-events:auto}
 [data-nav] ul{display:flex;flex-direction:column;gap:1.5rem;font-family:${f.head};font-size:2.5rem;text-transform:uppercase}
 @media(min-width:880px){
-  [data-nav]{position:static;transform:none;padding:0;background:transparent}
+  [data-nav]{display:block;position:static;transform:none;padding:0;background:transparent;visibility:visible;pointer-events:auto}
   [data-nav] ul{flex-direction:row;align-items:center;gap:2rem;font-size:.9rem;font-family:${f.body};font-weight:600;letter-spacing:.05em}
 }
 [data-nav] a:hover{color:var(--color-primary)}

@@ -7,6 +7,10 @@ import { TEMPLATE_01 } from '@/templates/template-01-classic-trade';
 import { TEMPLATE_02 } from '@/templates/template-02-editorial-cafe';
 import { TEMPLATE_03 } from '@/templates/template-03-studio-grid';
 import { TEMPLATE_04 } from '@/templates/template-04-bold-fitness';
+import { TEMPLATE_05 } from '@/templates/template-05-executive-consulting';
+import { TEMPLATE_06 } from '@/templates/template-06-boutique-salon';
+import { TEMPLATE_07 } from '@/templates/template-07-corporate-grid';
+import { TEMPLATE_08 } from '@/templates/template-08-performance-pro';
 
 export interface TemplateModule {
   meta: TemplateMeta;
@@ -21,6 +25,10 @@ export const TEMPLATES: Record<TemplateId, TemplateModule> = {
   'editorial-cafe': TEMPLATE_02,
   'studio-grid': TEMPLATE_03,
   'bold-fitness': TEMPLATE_04,
+  'executive-consulting': TEMPLATE_05,
+  'boutique-salon': TEMPLATE_06,
+  'corporate-grid': TEMPLATE_07,
+  'performance-pro': TEMPLATE_08,
 };
 
 export const TEMPLATE_LIST: TemplateMeta[] = Object.values(TEMPLATES).map((t) => t.meta);
