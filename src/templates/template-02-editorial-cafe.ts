@@ -14,6 +14,7 @@ import {
   socialLinks,
   testimonialsList,
   visuallyHiddenCss,
+  professionalOverhaulCss,
 } from './shared';
 
 const META: TemplateMeta = {
@@ -177,6 +178,7 @@ section{padding-block:clamp(3.5rem,8vw,7rem)}
 .social-links a{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08)}
 .social-links a:hover{background:var(--color-primary);color:var(--color-on-primary)}
 .social-links svg{width:18px;height:18px}
+${professionalOverhaulCss({ primary, secondary, head: f.head })}
 `;
 }
 
