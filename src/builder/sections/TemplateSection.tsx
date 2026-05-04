@@ -247,7 +247,7 @@ export function TemplateSection({ project, selectTemplate, updateDesign, reshuff
           <Toggle label="Show proof stats" checked={d.showStats} onChange={(showStats) => updateDesign({ showStats })} />
           <Toggle label="Show hero badges" checked={d.showBadges} onChange={(showBadges) => updateDesign({ showBadges })} />
           <Toggle label="Show service pricing" checked={d.showPricing} onChange={(showPricing) => updateDesign({ showPricing })} />
-          <Toggle label="Image first in split hero" checked={d.heroImageFirst} onChange={(heroImageFirst) => updateDesign({ heroImageFirst })} />
+          <Toggle label="Image / panel first in hero" checked={d.heroImageFirst} onChange={(heroImageFirst) => updateDesign({ heroImageFirst })} />
           <Toggle label="Mobile sticky CTA" checked={d.stickyCta} onChange={(stickyCta) => updateDesign({ stickyCta })} />
         </div>
       </SectionShell>
