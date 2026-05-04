@@ -4,7 +4,9 @@ import { SCHEMA_VERSION } from '@/types/project';
 import { newSeed } from '@/engine/random';
 import { buildZip, downloadBlob } from '@/engine/export';
 import { suggestTemplate } from '@/engine/render';
+import { COMPOSABLE_PRESETS } from '@/templates/composable';
 import { defaultProject } from './defaults';
+import { hydrateProject } from './projectMigration';
 import { loadAutosave, saveAutosave } from './storage';
 import { StepNav } from './components/StepNav';
 import { PreviewPane } from './components/PreviewPane';
@@ -21,7 +23,7 @@ const STEPS: Array<{ id: StepId; label: string }> = [
   { id: 'brand', label: 'Brand' },
   { id: 'content', label: 'Content' },
   { id: 'seo', label: 'SEO' },
-  { id: 'template', label: 'Template' },
+  { id: 'template', label: 'Design system' },
 ];
 
 export function App() {
@@ -107,8 +109,9 @@ export function App() {
           );
           return;
         }
-        setProject(parsed);
-        setFilename(deriveFilename(parsed));
+        const hydrated = hydrateProject(parsed);
+        setProject(hydrated);
+        setFilename(deriveFilename(hydrated));
       } catch (e) {
         alert('Could not read project.json — ' + (e instanceof Error ? e.message : 'bad JSON'));
       }
@@ -121,7 +124,11 @@ export function App() {
   }, []);
 
   const selectTemplate = useCallback((id: TemplateId) => {
-    setProject((p) => ({ ...p, templateId: id }));
+    setProject((p) => ({
+      ...p,
+      templateId: id,
+      design: { ...p.design, ...COMPOSABLE_PRESETS[id].design },
+    }));
   }, []);
 
   const savedLabel = useMemo(() => formatSavedAgo(savedAt), [savedAt]);
@@ -185,8 +192,8 @@ export function App() {
             <div className="mt-6 rounded-lg bg-ink-50 p-3 text-xs text-ink-600">
               <p className="font-medium text-ink-800">Tips</p>
               <ul className="mt-1 list-disc space-y-1 pl-4">
-                <li>Use Regenerate to remix layout while keeping your content.</li>
-                <li>Switch templates any time — your content carries over.</li>
+                <li>Pick a site strategy, then tune the design controls per client.</li>
+                <li>Use Regenerate to vary font pairings while keeping content intact.</li>
                 <li>Export downloads a self-contained, deployable ZIP.</li>
               </ul>
             </div>
@@ -226,6 +233,7 @@ export function App() {
                 <TemplateSection
                   project={project}
                   selectTemplate={selectTemplate}
+                  updateDesign={(patch) => update('design', patch)}
                   reshuffle={reshuffle}
                 />
               ) : null}

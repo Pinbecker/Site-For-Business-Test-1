@@ -5,6 +5,7 @@
  */
 import type { SiteProject } from '@/types/project';
 import { SCHEMA_VERSION } from '@/types/project';
+import { hydrateProject } from './projectMigration';
 
 const KEY = 'siteforge.project.v1';
 
@@ -14,7 +15,7 @@ export function loadAutosave(): SiteProject | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as SiteProject;
     if (!parsed || parsed.schemaVersion !== SCHEMA_VERSION) return null;
-    return parsed;
+    return hydrateProject(parsed);
   } catch {
     return null;
   }

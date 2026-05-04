@@ -1,0 +1,753 @@
+import type {
+  DesignSettings,
+  GalleryLayout,
+  HeroLayout,
+  ImageAsset,
+  SiteProject,
+  TemplateId,
+  TemplateMeta,
+} from '@/types/project';
+import type { TemplateModule } from '@/engine/render';
+import { escapeHtml } from '@/engine/escape';
+import { createRng } from '@/engine/random';
+import { readableOn, shade, tint } from '@/engine/color';
+import {
+  contactBlock,
+  hoursList,
+  imgTag,
+  logoOrName,
+  mapEmbed,
+  netlifyFormFields,
+  servicesList,
+  socialLinks,
+  testimonialsList,
+  visuallyHiddenCss,
+} from './shared';
+
+type SectionId = DesignSettings['sectionOrder'][number];
+
+interface Preset {
+  meta: TemplateMeta;
+  design: Partial<DesignSettings>;
+}
+
+const BASE_DESIGN: DesignSettings = {
+  mood: 'assured',
+  fontStyle: 'modern',
+  heroLayout: 'split',
+  navStyle: 'utility',
+  sectionLayout: 'balanced',
+  serviceLayout: 'cards',
+  galleryLayout: 'grid',
+  testimonialLayout: 'cards',
+  contactLayout: 'split',
+  cornerStyle: 'soft',
+  depthStyle: 'subtle',
+  density: 'comfortable',
+  contrast: 'standard',
+  sectionOrder: ['about', 'services', 'gallery', 'testimonials', 'contact'],
+  showStats: true,
+  showBadges: true,
+  showPricing: true,
+  heroImageFirst: false,
+  stickyCta: true,
+  ctaLabel: 'Get a quote',
+  secondaryCtaLabel: 'View services',
+};
+
+export const COMPOSABLE_PRESETS: Record<TemplateId, Preset> = {
+  'classic-trade': {
+    meta: {
+      id: 'classic-trade',
+      name: 'Local Authority',
+      description: 'A practical service-led site for trades, contractors, clinics, and local operators.',
+      bestFor: ['trades-contractor', 'professional-services', 'other'],
+      vibe: 'Trustworthy / direct / conversion-led',
+    },
+    design: { heroLayout: 'service-led', serviceLayout: 'cards', mood: 'assured' },
+  },
+  'editorial-cafe': {
+    meta: {
+      id: 'editorial-cafe',
+      name: 'Editorial Welcome',
+      description: 'A warm, image-forward direction for cafes, restaurants, venues, and lifestyle brands.',
+      bestFor: ['cafe-restaurant', 'retail-shop', 'hair-beauty'],
+      vibe: 'Warm / story-led / atmospheric',
+    },
+    design: {
+      mood: 'warm',
+      fontStyle: 'editorial',
+      heroLayout: 'editorial',
+      serviceLayout: 'price-menu',
+      galleryLayout: 'masonry',
+      sectionLayout: 'spacious',
+    },
+  },
+  'studio-grid': {
+    meta: {
+      id: 'studio-grid',
+      name: 'Studio Portfolio',
+      description: 'A clean portfolio structure for makers, studios, designers, salons, and visual work.',
+      bestFor: ['hair-beauty', 'retail-shop', 'professional-services'],
+      vibe: 'Visual / precise / portfolio-first',
+    },
+    design: { mood: 'crisp', fontStyle: 'technical', heroLayout: 'poster', galleryLayout: 'showcase' },
+  },
+  'bold-fitness': {
+    meta: {
+      id: 'bold-fitness',
+      name: 'Momentum',
+      description: 'High-contrast, action-focused pages for fitness, wellness, events, and launches.',
+      bestFor: ['fitness-wellness', 'other'],
+      vibe: 'Energetic / loud / urgent',
+    },
+    design: {
+      mood: 'expressive',
+      fontStyle: 'technical',
+      heroLayout: 'poster',
+      contrast: 'high',
+      density: 'compact',
+      serviceLayout: 'feature-grid',
+    },
+  },
+  'executive-consulting': {
+    meta: {
+      id: 'executive-consulting',
+      name: 'Expert Practice',
+      description: 'A restrained, credibility-heavy structure for consultants and professional services.',
+      bestFor: ['professional-services'],
+      vibe: 'Expert / calm / high-trust',
+    },
+    design: { mood: 'assured', fontStyle: 'classic', navStyle: 'centered', depthStyle: 'flat' },
+  },
+  'boutique-salon': {
+    meta: {
+      id: 'boutique-salon',
+      name: 'Boutique Booking',
+      description: 'A premium appointment-led layout for salons, beauty, wellness, and personal services.',
+      bestFor: ['hair-beauty', 'fitness-wellness'],
+      vibe: 'Premium / elegant / appointment-led',
+    },
+    design: {
+      mood: 'premium',
+      fontStyle: 'editorial',
+      heroLayout: 'stacked',
+      galleryLayout: 'masonry',
+      sectionLayout: 'spacious',
+      contactLayout: 'panel',
+    },
+  },
+  'corporate-grid': {
+    meta: {
+      id: 'corporate-grid',
+      name: 'Operations Grid',
+      description: 'A dense scanning layout for businesses with many services, proof points, or locations.',
+      bestFor: ['professional-services', 'trades-contractor', 'other'],
+      vibe: 'Organised / scalable / information-rich',
+    },
+    design: { mood: 'crisp', sectionLayout: 'compact', serviceLayout: 'feature-grid', density: 'compact' },
+  },
+  'performance-pro': {
+    meta: {
+      id: 'performance-pro',
+      name: 'Lead Engine',
+      description: 'A direct-response site shape for quote requests, campaigns, and service businesses.',
+      bestFor: ['trades-contractor', 'fitness-wellness', 'other'],
+      vibe: 'Conversion / proof / fast action',
+    },
+    design: {
+      mood: 'expressive',
+      heroLayout: 'service-led',
+      serviceLayout: 'feature-grid',
+      contrast: 'high',
+      stickyCta: true,
+    },
+  },
+  'neon-dark': {
+    meta: {
+      id: 'neon-dark',
+      name: 'Night Signal',
+      description: 'A dark, high-impact direction for modern venues, creators, and standout brands.',
+      bestFor: ['fitness-wellness', 'retail-shop', 'other'],
+      vibe: 'Dark / electric / memorable',
+    },
+    design: { mood: 'expressive', contrast: 'high', depthStyle: 'elevated', cornerStyle: 'rounded' },
+  },
+  'luxury-minimal': {
+    meta: {
+      id: 'luxury-minimal',
+      name: 'Quiet Premium',
+      description: 'Elegant whitespace, refined type, and calmer pacing for premium local businesses.',
+      bestFor: ['hair-beauty', 'retail-shop', 'professional-services'],
+      vibe: 'Minimal / premium / spacious',
+    },
+    design: {
+      mood: 'premium',
+      fontStyle: 'editorial',
+      heroLayout: 'split',
+      sectionLayout: 'spacious',
+      depthStyle: 'flat',
+      cornerStyle: 'soft',
+    },
+  },
+  'retro-americana': {
+    meta: {
+      id: 'retro-americana',
+      name: 'Character Shop',
+      description: 'A friendly, distinctive shopfront feel for cafes, retail, independents, and makers.',
+      bestFor: ['cafe-restaurant', 'retail-shop', 'other'],
+      vibe: 'Friendly / characterful / local',
+    },
+    design: { mood: 'playful', fontStyle: 'friendly', heroLayout: 'poster', cornerStyle: 'sharp' },
+  },
+  'brutalist-news': {
+    meta: {
+      id: 'brutalist-news',
+      name: 'Bold Notice',
+      description: 'A blunt, structured, announcement-style page for brands that need immediate attention.',
+      bestFor: ['trades-contractor', 'professional-services', 'other'],
+      vibe: 'Sharp / bold / no-nonsense',
+    },
+    design: { mood: 'crisp', fontStyle: 'technical', heroLayout: 'editorial', cornerStyle: 'sharp', contrast: 'high' },
+  },
+};
+
+export function createComposableTemplate(preset: Preset): TemplateModule {
+  return {
+    meta: preset.meta,
+    css: (project) => css(project, preset.design),
+    body: (project) => body(project, preset.design),
+  };
+}
+
+function resolveDesign(project: SiteProject, preset: Partial<DesignSettings>): DesignSettings {
+  return { ...BASE_DESIGN, ...preset, ...(project.design ?? {}) };
+}
+
+function css(project: SiteProject, preset: Partial<DesignSettings>): string {
+  const rng = createRng(project.randomization.seed);
+  const design = resolveDesign(project, preset);
+  const primary = project.brand.primaryColor;
+  const secondary = project.brand.secondaryColor;
+  const onPrimary = readableOn(primary);
+  const font = fontPair(design.fontStyle, rng.int(3));
+  const radius = design.cornerStyle === 'sharp' ? '0px' : design.cornerStyle === 'rounded' ? '24px' : '12px';
+  const radiusLg = design.cornerStyle === 'sharp' ? '0px' : design.cornerStyle === 'rounded' ? '38px' : '20px';
+  const shadow =
+    design.depthStyle === 'flat'
+      ? 'none'
+      : design.depthStyle === 'elevated'
+        ? '0 24px 70px rgba(14,20,32,.16)'
+        : '0 14px 38px rgba(14,20,32,.08)';
+  const pad =
+    design.density === 'compact'
+      ? 'clamp(1rem,2.5vw,2rem)'
+      : design.density === 'spacious'
+        ? 'clamp(1.5rem,4vw,4rem)'
+        : 'clamp(1.25rem,3vw,3rem)';
+  const sectionPad =
+    design.sectionLayout === 'compact'
+      ? 'clamp(2.75rem,5vw,4.75rem)'
+      : design.sectionLayout === 'spacious'
+        ? 'clamp(5rem,9vw,8rem)'
+        : 'clamp(3.75rem,7vw,6.5rem)';
+  const bg = design.contrast === 'high' ? '#f7f7f2' : design.mood === 'premium' ? '#fbfaf7' : '#fbfcff';
+  const ink = design.contrast === 'high' ? '#090909' : '#121722';
+  const surface = design.contrast === 'soft' ? tint(primary, 0.94) : '#ffffff';
+  const line = design.contrast === 'high' ? '#111111' : tint(secondary, 0.78);
+  const accentSoft = tint(primary, design.contrast === 'high' ? 0.74 : 0.88);
+
+  return `/* === SiteForge Composable System ============================ */
+@import url("${font.url}");
+:root{
+  --color-primary:${primary};
+  --color-secondary:${secondary};
+  --color-on-primary:${onPrimary};
+  --color-accent:${primary};
+  --color-bg:${bg};
+  --color-surface:${surface};
+  --color-ink:${ink};
+  --color-ink-2:${tint(ink, 0.28)};
+  --color-muted:${tint(ink, 0.48)};
+  --color-line:${line};
+  --color-soft:${accentSoft};
+  --font-head:${font.head};
+  --font-body:${font.body};
+  --radius:${radius};
+  --radius-lg:${radiusLg};
+  --shadow:${shadow};
+  --pad:${pad};
+  --section-pad:${sectionPad};
+  --max:${design.sectionLayout === 'compact' ? '1120px' : '1240px'};
+}
+${visuallyHiddenCss()}
+body{font-family:var(--font-body);background:var(--color-bg);color:var(--color-ink);line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--font-head);line-height:1.02;letter-spacing:0;font-weight:${design.fontStyle === 'technical' ? 800 : 700}}
+h1{font-size:clamp(2.55rem,7vw,6.6rem);max-width:13ch;text-wrap:balance}
+h2{font-size:clamp(2rem,4.5vw,4.5rem);max-width:12ch;text-wrap:balance}
+h3{font-size:clamp(1.1rem,1.5vw,1.45rem)}
+p{color:var(--color-ink-2)}
+section{padding-block:var(--section-pad)}
+.site-shell{min-height:100dvh}
+.section-kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--color-primary);margin-bottom:.75rem}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:1.5rem;margin-bottom:clamp(1.5rem,3vw,2.5rem)}
+.section-head p{max-width:48ch}
+.site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--color-bg) 90%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid color-mix(in srgb,var(--color-line) 70%,transparent)}
+.site-header__inner{min-height:76px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem}
+.brand-mark{font-family:var(--font-head);font-weight:800;font-size:1.02rem;letter-spacing:0}
+.brand-mark img{max-height:40px;width:auto}
+[data-nav]{display:none;position:fixed;inset:76px 0 auto 0;background:var(--color-bg);border-bottom:1px solid var(--color-line);padding:1rem var(--pad);box-shadow:var(--shadow)}
+[data-nav][data-open="true"]{display:block}
+[data-nav] ul{display:flex;flex-direction:column;gap:.35rem}
+[data-nav] a{display:block;border-radius:calc(var(--radius) * .7);padding:.7rem .85rem;font-weight:700;color:var(--color-muted)}
+[data-nav] a:hover{background:var(--color-soft);color:var(--color-ink)}
+@media(min-width:900px){
+  [data-nav]{display:block;position:static;background:transparent;border:0;padding:0;box-shadow:none}
+  [data-nav] ul{flex-direction:row;justify-content:${design.navStyle === 'centered' ? 'center' : 'end'};align-items:center;gap:.15rem}
+  [data-nav] a{padding:.5rem .7rem;font-size:.9rem}
+  [data-nav-toggle]{display:none}
+}
+.header-cta{display:none}
+@media(min-width:900px){.header-cta{display:inline-flex}}
+${design.navStyle === 'simple' ? '@media(min-width:900px){.header-cta{display:none}}' : ''}
+${design.navStyle === 'drawer' ? '@media(min-width:900px){[data-nav-toggle]{display:inline-grid}[data-nav]{display:none;position:fixed;inset:76px var(--pad) auto auto;width:min(360px,calc(100vw - 2rem));background:var(--color-bg);border:1px solid var(--color-line);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow)}[data-nav][data-open="true"]{display:block}[data-nav] ul{flex-direction:column;align-items:stretch}.header-cta{display:inline-flex}}' : ''}
+.cta{border-radius:var(--radius);border:1px solid transparent}
+.cta--primary{background:var(--color-primary);color:var(--color-on-primary);box-shadow:${design.depthStyle === 'flat' ? 'none' : '0 12px 30px color-mix(in srgb,var(--color-primary) 20%,transparent)'}}
+.cta--primary:hover{background:${shade(primary, 0.1)}}
+.cta--ghost{background:transparent;color:var(--color-ink);border-color:color-mix(in srgb,var(--color-line) 80%,transparent)}
+.cta--ghost:hover{background:var(--color-ink);color:#fff}
+.hero{padding-block:clamp(2rem,5vw,5rem);overflow:hidden}
+.hero__inner{display:grid;gap:clamp(1.25rem,3vw,3rem);align-items:center}
+[data-hero="split"] .hero__inner,[data-hero="service-led"] .hero__inner{grid-template-columns:1fr}
+@media(min-width:900px){[data-hero="split"] .hero__inner,[data-hero="service-led"] .hero__inner{grid-template-columns:${design.heroImageFirst ? 'minmax(0,.95fr) minmax(0,1.05fr)' : 'minmax(0,1.05fr) minmax(0,.95fr)'}}}
+[data-hero="poster"] .hero__inner,[data-hero="editorial"] .hero__inner,[data-hero="stacked"] .hero__inner{grid-template-columns:1fr}
+[data-hero="poster"] .hero{text-align:center}
+[data-hero="poster"] .hero h1,[data-hero="poster"] .hero__copy,[data-hero="stacked"] .hero h1,[data-hero="stacked"] .hero__copy{margin-inline:auto}
+[data-hero="editorial"] h1{max-width:18ch}
+.hero__copy{display:flex;flex-direction:column;gap:1.3rem;max-width:65ch}
+.hero__eyebrow{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.badge{display:inline-flex;align-items:center;min-height:30px;border:1px solid color-mix(in srgb,var(--color-primary) 22%,var(--color-line));border-radius:999px;padding:.3rem .65rem;background:color-mix(in srgb,var(--color-soft) 70%,white);color:var(--color-ink);font-size:.78rem;font-weight:800}
+.hero__sub{font-size:clamp(1.04rem,1.35vw,1.24rem);max-width:54ch}
+.hero__ctas{display:flex;flex-wrap:wrap;gap:.75rem}
+.hero__media{position:relative;overflow:hidden;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--color-soft),#fff);box-shadow:var(--shadow);min-height:280px}
+.hero__media img{width:100%;height:100%;object-fit:cover}
+[data-hero="poster"] .hero__media{max-height:540px;aspect-ratio:16/8;order:-1}
+[data-hero="stacked"] .hero__media{aspect-ratio:16/7}
+[data-hero="editorial"] .hero__media{aspect-ratio:5/3}
+[data-hero="service-led"] .hero__media{display:grid;align-content:end;padding:1rem}
+.hero__placeholder{position:absolute;inset:0;background:linear-gradient(145deg,var(--color-soft),#fff 62%,${tint(secondary, 0.86)})}
+.hero__proof{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-top:.5rem}
+.proof-card{border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:var(--radius);padding:.9rem;background:color-mix(in srgb,var(--color-surface) 90%,white);box-shadow:var(--shadow)}
+.proof-card strong{display:block;font-family:var(--font-head);font-size:1.25rem;color:var(--color-ink)}
+.proof-card span{font-size:.78rem;font-weight:700;color:var(--color-muted)}
+.surface{background:var(--color-surface);border-top:1px solid color-mix(in srgb,var(--color-line) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--color-line) 55%,transparent)}
+.about__grid,.contact__grid{display:grid;gap:clamp(1.25rem,3vw,3rem)}
+@media(min-width:900px){.about__grid,.contact__grid{grid-template-columns:.8fr 1.2fr}}
+.about__lead{font-size:clamp(1.03rem,1.3vw,1.2rem);white-space:pre-wrap}
+.services__grid{display:grid;gap:clamp(.85rem,2vw,1.25rem);grid-template-columns:1fr}
+@media(min-width:720px){.services__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1060px){[data-services="cards"] .services__grid,[data-services="feature-grid"] .services__grid{grid-template-columns:repeat(3,1fr)}}
+.service{border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:var(--radius-lg);background:var(--color-surface);box-shadow:var(--shadow);padding:clamp(1.1rem,2vw,1.55rem)}
+.service__top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.8rem}
+.service__num{font-weight:900;color:var(--color-primary)}
+.service__price{font-weight:900;color:var(--color-ink);white-space:nowrap}
+[data-services="list"] .services__grid,[data-services="price-menu"] .services__grid{display:block}
+[data-services="list"] .service,[data-services="price-menu"] .service{display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:start;border-width:1px 0 0 0;border-radius:0;box-shadow:none;background:transparent;padding:1.1rem 0}
+[data-services="list"] .service:last-child,[data-services="price-menu"] .service:last-child{border-bottom:1px solid color-mix(in srgb,var(--color-line) 70%,transparent)}
+.gallery__grid{display:grid;gap:.75rem}
+[data-gallery="grid"] .gallery__grid{grid-template-columns:repeat(2,1fr)}
+@media(min-width:860px){[data-gallery="grid"] .gallery__grid{grid-template-columns:repeat(4,1fr)}}
+[data-gallery="masonry"] .gallery__grid{grid-template-columns:repeat(2,1fr)}
+@media(min-width:860px){[data-gallery="masonry"] .gallery__grid{grid-template-columns:repeat(3,1fr)}}
+[data-gallery="filmstrip"] .gallery__grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.6rem}
+[data-gallery="showcase"] .gallery__grid{grid-template-columns:1.2fr .8fr}
+.gallery__item{overflow:hidden;border-radius:var(--radius);background:var(--color-soft);box-shadow:var(--shadow);min-height:180px}
+.gallery__item img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.gallery__item:hover img{transform:scale(1.04)}
+[data-gallery="masonry"] .gallery__item:nth-child(3n+1){grid-row:span 2;min-height:380px}
+[data-gallery="filmstrip"] .gallery__item{flex:0 0 min(78vw,360px);aspect-ratio:4/5;scroll-snap-align:start}
+[data-gallery="showcase"] .gallery__item:first-child{grid-row:span 2;min-height:420px}
+.testimonials__grid{display:grid;gap:1rem}
+@media(min-width:800px){.testimonials__grid{grid-template-columns:repeat(2,1fr)}}
+.testimonial{border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:var(--radius-lg);background:var(--color-surface);box-shadow:var(--shadow);padding:clamp(1.1rem,2vw,1.6rem)}
+.testimonial__quote{font-size:1.04rem}
+.testimonial__name{margin-top:1rem;font-weight:900;color:var(--color-primary)}
+[data-testimonials="spotlight"] .testimonials__grid{max-width:760px;margin-inline:auto;grid-template-columns:1fr}
+[data-testimonials="quotes"] .testimonial{box-shadow:none;background:transparent;border-width:0 0 1px 0;border-radius:0}
+.contact-form{display:flex;flex-direction:column;gap:1rem;border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:var(--radius-lg);background:var(--color-surface);box-shadow:var(--shadow);padding:clamp(1.1rem,2vw,1.6rem)}
+[data-contact="panel"] .contact{background:linear-gradient(180deg,var(--color-bg),var(--color-soft))}
+[data-contact="panel"] .contact-form,[data-contact="panel"] .hours-list{background:#fff}
+[data-contact="stacked"] .contact__grid{grid-template-columns:1fr}
+.contact-form__row{display:grid;gap:1rem}
+@media(min-width:640px){.contact-form__row{grid-template-columns:1fr 1fr}}
+.contact-form__field{display:flex;flex-direction:column;gap:.4rem;font-weight:800;color:var(--color-ink);font-size:.9rem}
+.contact-form__field input,.contact-form__field textarea{border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:calc(var(--radius) * .75);background:#fff;padding:.8rem .9rem}
+.contact-line{display:flex;flex-direction:column;gap:.18rem;border-bottom:1px solid color-mix(in srgb,var(--color-line) 55%,transparent);padding:.8rem 0}
+.contact-line strong{font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;color:var(--color-muted)}
+.hours-list{margin-top:1rem;border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:var(--radius);padding:.85rem;background:var(--color-surface)}
+.hours-row{display:flex;justify-content:space-between;gap:1rem;padding:.36rem 0;color:var(--color-ink-2)}
+.map-embed{margin-top:1rem;aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius);border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent)}
+.map-embed iframe{width:100%;height:100%;border:0}
+.site-footer{background:var(--color-ink);color:rgba(255,255,255,.72);padding:clamp(2.5rem,5vw,4.5rem) 0 1.5rem}
+.site-footer__inner{display:grid;gap:1.5rem}
+@media(min-width:760px){.site-footer__inner{grid-template-columns:1.5fr 1fr 1fr}}
+.site-footer h3{font-family:var(--font-head);color:#fff;margin-bottom:.65rem}
+.site-footer a:hover{color:${tint(primary, 0.55)}}
+.site-footer__bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:2rem;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.12);font-size:.85rem}
+.social-links{display:flex;gap:.5rem;margin-top:1rem}
+.social-links a{display:grid;place-items:center;width:40px;height:40px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+.social-links svg{width:16px;height:16px}
+.sticky-action{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:45;display:none}
+.sticky-action .cta{width:100%;box-shadow:0 18px 55px rgba(0,0,0,.24)}
+@media(max-width:760px){.sticky-action{display:${design.stickyCta ? 'block' : 'none'}}.hero__proof{grid-template-columns:1fr}.section-head{display:block}.hero__media{min-height:230px}}
+`;
+}
+
+function body(project: SiteProject, preset: Partial<DesignSettings>): string {
+  const design = resolveDesign(project, preset);
+  const sections = design.sectionOrder.filter((id) => shouldRender(id, project));
+  const heroImage = project.content.gallery[0] ?? project.brand.logo;
+  const nav = navItems(project);
+
+  return `
+    <div class="site-shell" data-hero="${design.heroLayout}" data-services="${design.serviceLayout}" data-gallery="${design.galleryLayout}" data-testimonials="${design.testimonialLayout}" data-contact="${design.contactLayout}">
+      <header class="site-header" id="top">
+        <div class="container site-header__inner">
+          ${logoOrName(project)}
+          <button type="button" class="header-toggle" data-nav-toggle aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span></span></button>
+          <nav class="primary-nav" id="primary-nav" data-nav data-open="false" aria-label="Primary">
+            <ul>${nav.map((n) => `<li><a href="${n.href}">${escapeHtml(n.label)}</a></li>`).join('')}</ul>
+          </nav>
+          <a href="#contact" class="cta cta--primary header-cta">${escapeHtml(design.ctaLabel)}</a>
+        </div>
+      </header>
+
+      <main id="main">
+        ${renderHero(project, design, heroImage)}
+        ${sections.map((id) => renderSection(id, project, design)).join('\n')}
+      </main>
+
+      ${design.stickyCta ? `<div class="sticky-action"><a href="#contact" class="cta cta--primary">${escapeHtml(design.ctaLabel)}</a></div>` : ''}
+      ${renderFooter(project)}
+    </div>`;
+}
+
+function renderHero(project: SiteProject, design: DesignSettings, heroImage: ImageAsset | null): string {
+  const city = project.seo.cityRegion || project.business.address || 'Local service';
+  const badges = design.showBadges
+    ? `<div class="hero__eyebrow">
+        <span class="badge">${escapeHtml(city)}</span>
+        <span class="badge">${escapeHtml(industryLabel(project.business.industry))}</span>
+      </div>`
+    : '';
+  const proof = design.showStats ? renderProof(project) : '';
+  const media = renderHeroMedia(heroImage, design.heroLayout);
+  const copy = `<div class="hero__copy" data-reveal>
+      ${badges}
+      <h1>${escapeHtml(project.business.name)}</h1>
+      <p class="hero__sub">${escapeHtml(project.business.tagline)}</p>
+      <div class="hero__ctas">
+        <a href="#contact" class="cta cta--primary">${escapeHtml(design.ctaLabel)}</a>
+        <a href="#services" class="cta cta--ghost">${escapeHtml(design.secondaryCtaLabel)}</a>
+      </div>
+      ${proof}
+    </div>`;
+  const inner = design.heroImageFirst ? media + copy : copy + media;
+
+  return `<section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">${inner.replace('<h1>', '<h1 id="hero-title">')}</div>
+    </section>`;
+}
+
+function renderHeroMedia(image: ImageAsset | null, layout: HeroLayout): string {
+  if (layout === 'service-led') {
+    return `<div class="hero__media" aria-hidden="${image ? 'false' : 'true'}">
+      ${image ? imgTag(image, { loading: 'eager' }) : '<div class="hero__placeholder"></div>'}
+    </div>`;
+  }
+  return `<div class="hero__media" aria-hidden="${image ? 'false' : 'true'}">
+      ${image ? imgTag(image, { loading: 'eager' }) : '<div class="hero__placeholder"></div>'}
+    </div>`;
+}
+
+function renderProof(project: SiteProject): string {
+  const services = servicesList(project.content.services).length;
+  const testimonials = testimonialsList(project.content.testimonials).length;
+  return `<div class="hero__proof" aria-label="Business highlights">
+      <div class="proof-card"><strong>${services || '3'}+</strong><span>Core services</span></div>
+      <div class="proof-card"><strong>${testimonials || '5'}★</strong><span>Client proof</span></div>
+      <div class="proof-card"><strong>Local</strong><span>${escapeHtml(project.seo.cityRegion || 'Area')}</span></div>
+    </div>`;
+}
+
+function renderSection(id: SectionId, project: SiteProject, design: DesignSettings): string {
+  if (id === 'about') return renderAbout(project, design);
+  if (id === 'services') return renderServices(project, design);
+  if (id === 'gallery') return renderGallery(project, design.galleryLayout);
+  if (id === 'testimonials') return renderTestimonials(project, design);
+  return renderContact(project, design);
+}
+
+function renderAbout(project: SiteProject, design: DesignSettings): string {
+  const surface = design.sectionLayout === 'feature' || design.mood === 'premium' ? ' surface' : '';
+  return `<section class="about${surface}" id="about" aria-labelledby="about-title">
+      <div class="container about__grid">
+        <div data-reveal>
+          <p class="section-kicker">About</p>
+          <h2 id="about-title">Built around the way clients actually choose.</h2>
+        </div>
+        <div data-reveal>
+          <p class="about__lead">${escapeHtml(project.content.about)}</p>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderServices(project: SiteProject, design: DesignSettings): string {
+  const services = servicesList(project.content.services);
+  if (!services.length) return '';
+  return `<section class="services" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Services</p>
+            <h2 id="services-title">Clear offers, easy decisions.</h2>
+          </div>
+          <p>Give visitors enough structure to understand the offer quickly and enough detail to make contact with confidence.</p>
+        </div>
+        <div class="services__grid">
+          ${services
+            .map(
+              (s, i) => `<article class="service" data-reveal>
+              <div class="service__top">
+                <span class="service__num">${String(i + 1).padStart(2, '0')}</span>
+                ${design.showPricing && s.price ? `<span class="service__price">${escapeHtml(s.price)}</span>` : ''}
+              </div>
+              <h3 class="service__name">${escapeHtml(s.name)}</h3>
+              <p class="service__desc">${escapeHtml(s.description)}</p>
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderGallery(project: SiteProject, layout: GalleryLayout): string {
+  const gallery = project.content.gallery;
+  if (!gallery.length) return '';
+  const className = layout === 'filmstrip' ? 'gallery surface' : 'gallery';
+  return `<section class="${className}" id="gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Work</p>
+            <h2 id="gallery-title">Proof you can see.</h2>
+          </div>
+          <p>Images help customers understand quality, style, and fit before they ever get in touch.</p>
+        </div>
+        <div class="gallery__grid" data-lightbox>
+          ${gallery.map((g) => `<figure class="gallery__item">${imgTag(g)}</figure>`).join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderTestimonials(project: SiteProject, design: DesignSettings): string {
+  const testimonials = testimonialsList(project.content.testimonials);
+  if (!testimonials.length) return '';
+  const title = design.testimonialLayout === 'spotlight' ? 'A few words from clients.' : 'People want to know what working with you feels like.';
+  return `<section class="testimonials surface" id="testimonials" aria-labelledby="testimonials-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Trust</p>
+            <h2 id="testimonials-title">${escapeHtml(title)}</h2>
+          </div>
+        </div>
+        <div class="testimonials__grid">
+          ${testimonials
+            .map(
+              (t) => `<article class="testimonial" data-reveal>
+              <p class="testimonial__quote">${escapeHtml(t.quote)}</p>
+              <p class="testimonial__name">${escapeHtml(t.customerName)}</p>
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderContact(project: SiteProject, design: DesignSettings): string {
+  const stacked = design.contactLayout === 'stacked';
+  return `<section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Contact</p>
+            <h2 id="contact-title">Make the next step simple.</h2>
+          </div>
+          <p>Fast forms, visible contact details, and practical location information help turn interest into enquiries.</p>
+        </div>
+        <div class="contact__grid" style="${stacked ? 'grid-template-columns:1fr' : ''}">
+          <div data-reveal>
+            ${contactBlock(project)}
+            ${hoursList(project)}
+            ${mapEmbed(project)}
+          </div>
+          <div data-reveal>${netlifyFormFields(project)}</div>
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderFooter(project: SiteProject): string {
+  const gallery = project.content.gallery;
+  const testimonials = testimonialsList(project.content.testimonials);
+  return `<footer class="site-footer">
+      <div class="container site-footer__inner">
+        <div>
+          <h3>${escapeHtml(project.business.name)}</h3>
+          <p>${escapeHtml(project.business.tagline)}</p>
+          ${socialLinks(project)}
+        </div>
+        <div>
+          <h3>Pages</h3>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            ${gallery.length ? '<li><a href="#gallery">Work</a></li>' : ''}
+            ${testimonials.length ? '<li><a href="#testimonials">Reviews</a></li>' : ''}
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Details</h3>
+          <ul>
+            ${project.business.phone ? `<li>${escapeHtml(project.business.phone)}</li>` : ''}
+            ${project.business.email ? `<li>${escapeHtml(project.business.email)}</li>` : ''}
+            ${project.business.address ? `<li>${escapeHtml(project.business.address)}</li>` : ''}
+          </ul>
+        </div>
+      </div>
+      <div class="container site-footer__bottom">
+        <span>Copyright <span data-year>${new Date().getFullYear()}</span> ${escapeHtml(project.business.name)}</span>
+        <span>${escapeHtml(project.seo.cityRegion || '')}</span>
+      </div>
+    </footer>`;
+}
+
+function shouldRender(id: SectionId, project: SiteProject): boolean {
+  if (id === 'gallery') return project.content.gallery.length > 0;
+  if (id === 'testimonials') return testimonialsList(project.content.testimonials).length > 0;
+  return true;
+}
+
+function navItems(project: SiteProject): Array<{ href: string; label: string }> {
+  return [
+    { href: '#about', label: 'About' },
+    { href: '#services', label: 'Services' },
+    ...(project.content.gallery.length ? [{ href: '#gallery', label: 'Work' }] : []),
+    ...(testimonialsList(project.content.testimonials).length ? [{ href: '#testimonials', label: 'Reviews' }] : []),
+    { href: '#contact', label: 'Contact' },
+  ];
+}
+
+function industryLabel(value: SiteProject['business']['industry']): string {
+  return value
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function fontPair(style: DesignSettings['fontStyle'], variant: number): { head: string; body: string; url: string } {
+  const sets: Record<DesignSettings['fontStyle'], Array<{ head: string; body: string; url: string }>> = {
+    modern: [
+      {
+        head: '"Inter Tight", system-ui, sans-serif',
+        body: '"Inter", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@600;700;800&display=swap',
+      },
+      {
+        head: '"Manrope", system-ui, sans-serif',
+        body: '"Manrope", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap',
+      },
+      {
+        head: '"Plus Jakarta Sans", system-ui, sans-serif',
+        body: '"Plus Jakarta Sans", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
+      },
+    ],
+    classic: [
+      {
+        head: '"Libre Baskerville", Georgia, serif',
+        body: '"Source Sans 3", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap',
+      },
+      {
+        head: '"Cormorant Garamond", Georgia, serif',
+        body: '"Jost", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600;700&display=swap',
+      },
+      {
+        head: '"Lora", Georgia, serif',
+        body: '"Nunito Sans", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Nunito+Sans:wght@400;500;600;700&display=swap',
+      },
+    ],
+    editorial: [
+      {
+        head: '"Playfair Display", Georgia, serif',
+        body: '"Raleway", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Raleway:wght@400;500;600;700&display=swap',
+      },
+      {
+        head: '"Fraunces", Georgia, serif',
+        body: '"DM Sans", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,800&display=swap',
+      },
+      {
+        head: '"Newsreader", Georgia, serif',
+        body: '"Work Sans", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650;6..72,800&family=Work+Sans:wght@400;500;600;700&display=swap',
+      },
+    ],
+    technical: [
+      {
+        head: '"Space Grotesk", system-ui, sans-serif',
+        body: '"Space Grotesk", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap',
+      },
+      {
+        head: '"Barlow Condensed", system-ui, sans-serif',
+        body: '"Barlow", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800;900&display=swap',
+      },
+      {
+        head: '"Sora", system-ui, sans-serif',
+        body: '"Sora", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap',
+      },
+    ],
+    friendly: [
+      {
+        head: '"Cabinet Grotesk", "Trebuchet MS", sans-serif',
+        body: '"Nunito Sans", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap',
+      },
+      {
+        head: '"Outfit", system-ui, sans-serif',
+        body: '"Outfit", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap',
+      },
+      {
+        head: '"Urbanist", system-ui, sans-serif',
+        body: '"Urbanist", system-ui, sans-serif',
+        url: 'https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap',
+      },
+    ],
+  };
+  return sets[style][variant % sets[style].length]!;
+}

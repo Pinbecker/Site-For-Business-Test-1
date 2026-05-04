@@ -1,4 +1,5 @@
 import type {
+  DesignSettings,
   OpeningHours,
   ServiceItem,
   SiteProject,
@@ -28,6 +29,32 @@ export function newTestimonial(): Testimonial {
   return { id: newId('tst'), quote: '', customerName: '' };
 }
 
+export function defaultDesignSettings(): DesignSettings {
+  return {
+    mood: 'assured',
+    fontStyle: 'modern',
+    heroLayout: 'split',
+    navStyle: 'utility',
+    sectionLayout: 'balanced',
+    serviceLayout: 'cards',
+    galleryLayout: 'grid',
+    testimonialLayout: 'cards',
+    contactLayout: 'split',
+    cornerStyle: 'soft',
+    depthStyle: 'subtle',
+    density: 'comfortable',
+    contrast: 'standard',
+    sectionOrder: ['about', 'services', 'gallery', 'testimonials', 'contact'],
+    showStats: true,
+    showBadges: true,
+    showPricing: true,
+    heroImageFirst: false,
+    stickyCta: true,
+    ctaLabel: 'Get a quote',
+    secondaryCtaLabel: 'View services',
+  };
+}
+
 export function defaultProject(): SiteProject {
   const now = new Date().toISOString();
   return {
@@ -37,6 +64,7 @@ export function defaultProject(): SiteProject {
     updatedAt: now,
     templateId: 'classic-trade',
     randomization: { seed: newSeed() },
+    design: defaultDesignSettings(),
     business: {
       name: 'Acme Local',
       tagline: 'Trusted local service for your home and business.',

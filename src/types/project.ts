@@ -146,6 +146,65 @@ export type TemplateId =
   | 'retro-americana'
   | 'brutalist-news';
 
+export type SiteMood =
+  | 'assured'
+  | 'warm'
+  | 'crisp'
+  | 'expressive'
+  | 'premium'
+  | 'playful';
+
+export type HeroLayout =
+  | 'split'
+  | 'poster'
+  | 'editorial'
+  | 'stacked'
+  | 'service-led';
+
+export type NavStyle = 'simple' | 'centered' | 'utility' | 'drawer';
+
+export type SectionLayout = 'balanced' | 'compact' | 'spacious' | 'feature';
+
+export type ServiceLayout = 'cards' | 'list' | 'price-menu' | 'feature-grid';
+
+export type GalleryLayout = 'grid' | 'masonry' | 'filmstrip' | 'showcase';
+
+export type TestimonialLayout = 'cards' | 'quotes' | 'spotlight';
+
+export type ContactLayout = 'split' | 'panel' | 'stacked';
+
+export type CornerStyle = 'sharp' | 'soft' | 'rounded';
+
+export type DepthStyle = 'flat' | 'subtle' | 'elevated';
+
+export type Density = 'compact' | 'comfortable' | 'spacious';
+
+export type FontStyle = 'modern' | 'classic' | 'editorial' | 'technical' | 'friendly';
+
+export interface DesignSettings {
+  mood: SiteMood;
+  fontStyle: FontStyle;
+  heroLayout: HeroLayout;
+  navStyle: NavStyle;
+  sectionLayout: SectionLayout;
+  serviceLayout: ServiceLayout;
+  galleryLayout: GalleryLayout;
+  testimonialLayout: TestimonialLayout;
+  contactLayout: ContactLayout;
+  cornerStyle: CornerStyle;
+  depthStyle: DepthStyle;
+  density: Density;
+  contrast: 'soft' | 'standard' | 'high';
+  sectionOrder: Array<'about' | 'services' | 'gallery' | 'testimonials' | 'contact'>;
+  showStats: boolean;
+  showBadges: boolean;
+  showPricing: boolean;
+  heroImageFirst: boolean;
+  stickyCta: boolean;
+  ctaLabel: string;
+  secondaryCtaLabel: string;
+}
+
 export interface RandomizationSeed {
   /** Numeric seed used by the templates' deterministic randomizer. */
   seed: number;
@@ -158,6 +217,7 @@ export interface SiteProject {
   updatedAt: string;
   templateId: TemplateId;
   randomization: RandomizationSeed;
+  design: DesignSettings;
   business: BusinessInfo;
   brand: Brand;
   content: Content;
