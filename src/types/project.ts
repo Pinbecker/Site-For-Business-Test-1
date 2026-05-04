@@ -140,7 +140,11 @@ export type TemplateId =
   | 'executive-consulting'
   | 'boutique-salon'
   | 'corporate-grid'
-  | 'performance-pro';
+  | 'performance-pro'
+  | 'neon-dark'
+  | 'luxury-minimal'
+  | 'retro-americana'
+  | 'brutalist-news';
 
 export interface RandomizationSeed {
   /** Numeric seed used by the templates' deterministic randomizer. */
