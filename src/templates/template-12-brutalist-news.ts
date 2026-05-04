@@ -2,7 +2,7 @@ import type { SiteProject, TemplateMeta } from '@/types/project';
 import type { TemplateModule } from '@/engine/render';
 import { escapeHtml } from '@/engine/escape';
 import { createRng } from '@/engine/random';
-import { readableOn, shade, tint } from '@/engine/color';
+import { readableOn } from '@/engine/color';
 import {
   contactBlock,
   hoursList,
