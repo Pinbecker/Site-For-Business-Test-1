@@ -110,6 +110,59 @@ export interface Testimonial {
   customerName: string;
 }
 
+export interface FeatureItem {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface ProcessStep {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  photo: ImageAsset | null;
+}
+
+export interface CredentialItem {
+  id: string;
+  label: string;
+  detail: string;
+}
+
+export interface AreaServed {
+  id: string;
+  name: string;
+}
+
+export interface ProductItem {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+}
+
+export interface Promotion {
+  enabled: boolean;
+  eyebrow: string;
+  title: string;
+  description: string;
+  buttonLabel: string;
+  buttonUrl: string;
+}
+
 export interface Social {
   instagram: string;
   facebook: string;
@@ -118,9 +171,17 @@ export interface Social {
 
 export interface Content {
   about: string;
+  features: FeatureItem[];
+  process: ProcessStep[];
   services: ServiceItem[];
+  products: ProductItem[];
   gallery: ImageAsset[];
   testimonials: Testimonial[];
+  faqs: FaqItem[];
+  team: TeamMember[];
+  credentials: CredentialItem[];
+  areasServed: AreaServed[];
+  promotion: Promotion;
   social: Social;
 }
 
@@ -195,7 +256,21 @@ export interface DesignSettings {
   depthStyle: DepthStyle;
   density: Density;
   contrast: 'soft' | 'standard' | 'high';
-  sectionOrder: Array<'about' | 'services' | 'gallery' | 'testimonials' | 'contact'>;
+  sectionOrder: Array<
+    | 'about'
+    | 'features'
+    | 'services'
+    | 'products'
+    | 'process'
+    | 'gallery'
+    | 'team'
+    | 'credentials'
+    | 'areas'
+    | 'promotion'
+    | 'testimonials'
+    | 'faqs'
+    | 'contact'
+  >;
   showStats: boolean;
   showBadges: boolean;
   showPricing: boolean;

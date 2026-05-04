@@ -1,6 +1,6 @@
 import type { DesignSettings, SiteProject, TemplateId } from '@/types/project';
 import { SCHEMA_VERSION } from '@/types/project';
-import { defaultDesignSettings } from './defaults';
+import { defaultDesignSettings, defaultProject } from './defaults';
 
 const LEGACY_TEMPLATE_TO_DESIGN: Partial<Record<TemplateId, Partial<DesignSettings>>> = {
   'classic-trade': {
@@ -86,13 +86,38 @@ const LEGACY_TEMPLATE_TO_DESIGN: Partial<Record<TemplateId, Partial<DesignSettin
 };
 
 export function hydrateProject(input: SiteProject): SiteProject {
+  const fallback = defaultProject();
   const defaults = defaultDesignSettings();
   const legacy = LEGACY_TEMPLATE_TO_DESIGN[input.templateId] ?? {};
   const design = { ...defaults, ...legacy, ...(input.design ?? {}) };
+  design.sectionOrder = mergeSectionOrder(input.design?.sectionOrder, defaults.sectionOrder);
 
   return {
     ...input,
     schemaVersion: SCHEMA_VERSION,
+    content: {
+      ...fallback.content,
+      ...input.content,
+      promotion: {
+        ...fallback.content.promotion,
+        ...input.content?.promotion,
+      },
+      social: {
+        ...fallback.content.social,
+        ...input.content?.social,
+      },
+    },
     design,
   };
+}
+
+function mergeSectionOrder(
+  saved: DesignSettings['sectionOrder'] | undefined,
+  defaults: DesignSettings['sectionOrder'],
+): DesignSettings['sectionOrder'] {
+  const next = saved?.length ? saved.slice() : defaults.slice();
+  for (const id of defaults) {
+    if (!next.includes(id)) next.push(id);
+  }
+  return next.filter((id, index) => next.indexOf(id) === index);
 }

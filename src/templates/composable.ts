@@ -8,7 +8,7 @@ import type {
   TemplateMeta,
 } from '@/types/project';
 import type { TemplateModule } from '@/engine/render';
-import { escapeHtml } from '@/engine/escape';
+import { escapeAttr, escapeHtml } from '@/engine/escape';
 import { createRng } from '@/engine/random';
 import { readableOn, shade, tint } from '@/engine/color';
 import {
@@ -344,6 +344,12 @@ ${design.navStyle === 'drawer' ? '@media(min-width:900px){[data-nav-toggle]{disp
 .about__grid,.contact__grid{display:grid;gap:clamp(1.25rem,3vw,3rem)}
 @media(min-width:900px){.about__grid,.contact__grid{grid-template-columns:.8fr 1.2fr}}
 .about__lead{font-size:clamp(1.03rem,1.3vw,1.2rem);white-space:pre-wrap}
+.features__grid,.products__grid,.credentials__grid,.areas__grid{display:grid;gap:clamp(.85rem,2vw,1.25rem);grid-template-columns:1fr}
+@media(min-width:760px){.features__grid,.products__grid,.credentials__grid{grid-template-columns:repeat(3,1fr)}.areas__grid{grid-template-columns:repeat(4,1fr)}}
+.feature,.product,.credential,.area-pill,.process-step,.faq-item,.team-member{border:1px solid color-mix(in srgb,var(--color-line) 70%,transparent);border-radius:var(--radius-lg);background:var(--color-surface);box-shadow:var(--shadow)}
+.feature,.product,.credential,.team-member{padding:clamp(1.1rem,2vw,1.55rem)}
+.feature__icon,.process-step__num{display:grid;place-items:center;width:42px;height:42px;border-radius:999px;background:var(--color-soft);color:var(--color-primary);font-weight:900;margin-bottom:1rem}
+.product__price{display:inline-flex;margin-top:1rem;font-weight:900;color:var(--color-primary)}
 .services__grid{display:grid;gap:clamp(.85rem,2vw,1.25rem);grid-template-columns:1fr}
 @media(min-width:720px){.services__grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1060px){[data-services="cards"] .services__grid,[data-services="feature-grid"] .services__grid{grid-template-columns:repeat(3,1fr)}}
@@ -354,6 +360,26 @@ ${design.navStyle === 'drawer' ? '@media(min-width:900px){[data-nav-toggle]{disp
 [data-services="list"] .services__grid,[data-services="price-menu"] .services__grid{display:block}
 [data-services="list"] .service,[data-services="price-menu"] .service{display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:start;border-width:1px 0 0 0;border-radius:0;box-shadow:none;background:transparent;padding:1.1rem 0}
 [data-services="list"] .service:last-child,[data-services="price-menu"] .service:last-child{border-bottom:1px solid color-mix(in srgb,var(--color-line) 70%,transparent)}
+.process__grid{display:grid;gap:1rem;counter-reset:process}
+@media(min-width:820px){.process__grid{grid-template-columns:repeat(3,1fr)}}
+.process-step{padding:clamp(1.1rem,2vw,1.55rem);position:relative}
+.process-step__num{font-family:var(--font-head)}
+.team__grid{display:grid;gap:1rem}
+@media(min-width:760px){.team__grid{grid-template-columns:repeat(3,1fr)}}
+.team-member__photo{aspect-ratio:1/1;overflow:hidden;border-radius:calc(var(--radius-lg) * .85);background:var(--color-soft);margin-bottom:1rem}
+.team-member__photo img{width:100%;height:100%;object-fit:cover}
+.team-member__role{font-weight:900;color:var(--color-primary);margin:.25rem 0 .7rem}
+.credential strong{display:block;font-family:var(--font-head);font-size:1.2rem;margin-bottom:.45rem}
+.area-pill{padding:.8rem 1rem;text-align:center;font-weight:900;color:var(--color-ink)}
+.promotion__box{display:grid;gap:1rem;align-items:center;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--color-primary),${shade(primary, 0.18)});color:var(--color-on-primary);padding:clamp(1.5rem,4vw,3rem);box-shadow:var(--shadow)}
+@media(min-width:840px){.promotion__box{grid-template-columns:1fr auto}}
+.promotion__box p,.promotion__box .section-kicker{color:color-mix(in srgb,var(--color-on-primary) 78%,transparent)}
+.promotion__box .cta{background:var(--color-on-primary);color:var(--color-primary)}
+.faqs__grid{display:grid;gap:.85rem}
+@media(min-width:900px){.faqs__grid{grid-template-columns:repeat(2,1fr)}}
+.faq-item{padding:1.1rem}
+.faq-item summary{cursor:pointer;font-weight:900;color:var(--color-ink)}
+.faq-item p{margin-top:.7rem}
 .gallery__grid{display:grid;gap:.75rem}
 [data-gallery="grid"] .gallery__grid{grid-template-columns:repeat(2,1fr)}
 @media(min-width:860px){[data-gallery="grid"] .gallery__grid{grid-template-columns:repeat(4,1fr)}}
@@ -482,9 +508,17 @@ function renderProof(project: SiteProject): string {
 
 function renderSection(id: SectionId, project: SiteProject, design: DesignSettings): string {
   if (id === 'about') return renderAbout(project, design);
+  if (id === 'features') return renderFeatures(project);
   if (id === 'services') return renderServices(project, design);
+  if (id === 'products') return renderProducts(project);
+  if (id === 'process') return renderProcess(project);
   if (id === 'gallery') return renderGallery(project, design.galleryLayout);
+  if (id === 'team') return renderTeam(project);
+  if (id === 'credentials') return renderCredentials(project);
+  if (id === 'areas') return renderAreas(project);
+  if (id === 'promotion') return renderPromotion(project);
   if (id === 'testimonials') return renderTestimonials(project, design);
+  if (id === 'faqs') return renderFaqs(project);
   return renderContact(project, design);
 }
 
@@ -533,6 +567,84 @@ function renderServices(project: SiteProject, design: DesignSettings): string {
     </section>`;
 }
 
+function renderFeatures(project: SiteProject): string {
+  const features = project.content.features.filter((item) => item.title.trim());
+  if (!features.length) return '';
+  return `<section class="features surface" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Why choose us</p>
+            <h2 id="features-title">Reasons customers feel confident.</h2>
+          </div>
+        </div>
+        <div class="features__grid">
+          ${features
+            .map(
+              (item, i) => `<article class="feature" data-reveal>
+              <span class="feature__icon">${String(i + 1).padStart(2, '0')}</span>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderProducts(project: SiteProject): string {
+  const products = project.content.products.filter((item) => item.name.trim());
+  if (!products.length) return '';
+  return `<section class="products" id="products" aria-labelledby="products-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Products</p>
+            <h2 id="products-title">Items, packages, and favourites.</h2>
+          </div>
+        </div>
+        <div class="products__grid">
+          ${products
+            .map(
+              (item) => `<article class="product" data-reveal>
+              <h3>${escapeHtml(item.name)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+              ${item.price ? `<span class="product__price">${escapeHtml(item.price)}</span>` : ''}
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderProcess(project: SiteProject): string {
+  const steps = project.content.process.filter((item) => item.title.trim());
+  if (!steps.length) return '';
+  return `<section class="process" id="process" aria-labelledby="process-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">How it works</p>
+            <h2 id="process-title">A simple path from enquiry to result.</h2>
+          </div>
+        </div>
+        <div class="process__grid">
+          ${steps
+            .map(
+              (item, i) => `<article class="process-step" data-reveal>
+              <span class="process-step__num">${String(i + 1).padStart(2, '0')}</span>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.description)}</p>
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
 function renderGallery(project: SiteProject, layout: GalleryLayout): string {
   const gallery = project.content.gallery;
   if (!gallery.length) return '';
@@ -572,6 +684,123 @@ function renderTestimonials(project: SiteProject, design: DesignSettings): strin
               <p class="testimonial__quote">${escapeHtml(t.quote)}</p>
               <p class="testimonial__name">${escapeHtml(t.customerName)}</p>
             </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderTeam(project: SiteProject): string {
+  const team = project.content.team.filter((item) => item.name.trim());
+  if (!team.length) return '';
+  return `<section class="team" id="team" aria-labelledby="team-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Team</p>
+            <h2 id="team-title">Meet the people behind the work.</h2>
+          </div>
+        </div>
+        <div class="team__grid">
+          ${team
+            .map(
+              (member) => `<article class="team-member" data-reveal>
+              ${
+                member.photo
+                  ? `<figure class="team-member__photo">${imgTag(member.photo)}</figure>`
+                  : '<div class="team-member__photo" aria-hidden="true"></div>'
+              }
+              <h3>${escapeHtml(member.name)}</h3>
+              ${member.role ? `<p class="team-member__role">${escapeHtml(member.role)}</p>` : ''}
+              <p>${escapeHtml(member.bio)}</p>
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderCredentials(project: SiteProject): string {
+  const credentials = project.content.credentials.filter((item) => item.label.trim());
+  if (!credentials.length) return '';
+  return `<section class="credentials surface" id="credentials" aria-labelledby="credentials-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Credentials</p>
+            <h2 id="credentials-title">Signals that reduce doubt.</h2>
+          </div>
+        </div>
+        <div class="credentials__grid">
+          ${credentials
+            .map(
+              (item) => `<article class="credential" data-reveal>
+              <strong>${escapeHtml(item.label)}</strong>
+              <p>${escapeHtml(item.detail)}</p>
+            </article>`,
+            )
+            .join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderAreas(project: SiteProject): string {
+  const areas = project.content.areasServed.filter((item) => item.name.trim());
+  if (!areas.length) return '';
+  return `<section class="areas" id="areas" aria-labelledby="areas-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">Areas served</p>
+            <h2 id="areas-title">Local coverage made clear.</h2>
+          </div>
+        </div>
+        <div class="areas__grid">
+          ${areas.map((item) => `<div class="area-pill" data-reveal>${escapeHtml(item.name)}</div>`).join('\n')}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderPromotion(project: SiteProject): string {
+  const promo = project.content.promotion;
+  if (!promo.enabled || !promo.title.trim()) return '';
+  const href = promo.buttonUrl.trim() || '#contact';
+  return `<section class="promotion" id="promotion" aria-labelledby="promotion-title">
+      <div class="container">
+        <div class="promotion__box" data-reveal>
+          <div>
+            ${promo.eyebrow ? `<p class="section-kicker">${escapeHtml(promo.eyebrow)}</p>` : ''}
+            <h2 id="promotion-title">${escapeHtml(promo.title)}</h2>
+            <p>${escapeHtml(promo.description)}</p>
+          </div>
+          ${promo.buttonLabel ? `<a href="${escapeAttr(href)}" class="cta">${escapeHtml(promo.buttonLabel)}</a>` : ''}
+        </div>
+      </div>
+    </section>`;
+}
+
+function renderFaqs(project: SiteProject): string {
+  const faqs = project.content.faqs.filter((item) => item.question.trim());
+  if (!faqs.length) return '';
+  return `<section class="faqs" id="faqs" aria-labelledby="faqs-title">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="section-kicker">FAQs</p>
+            <h2 id="faqs-title">Answers before they have to ask.</h2>
+          </div>
+        </div>
+        <div class="faqs__grid">
+          ${faqs
+            .map(
+              (item) => `<details class="faq-item" data-reveal>
+              <summary>${escapeHtml(item.question)}</summary>
+              <p>${escapeHtml(item.answer)}</p>
+            </details>`,
             )
             .join('\n')}
         </div>
@@ -639,8 +868,16 @@ function renderFooter(project: SiteProject): string {
 }
 
 function shouldRender(id: SectionId, project: SiteProject): boolean {
+  if (id === 'features') return project.content.features.some((item) => item.title.trim());
+  if (id === 'products') return project.content.products.some((item) => item.name.trim());
+  if (id === 'process') return project.content.process.some((item) => item.title.trim());
   if (id === 'gallery') return project.content.gallery.length > 0;
+  if (id === 'team') return project.content.team.some((item) => item.name.trim());
+  if (id === 'credentials') return project.content.credentials.some((item) => item.label.trim());
+  if (id === 'areas') return project.content.areasServed.some((item) => item.name.trim());
+  if (id === 'promotion') return project.content.promotion.enabled && project.content.promotion.title.trim().length > 0;
   if (id === 'testimonials') return testimonialsList(project.content.testimonials).length > 0;
+  if (id === 'faqs') return project.content.faqs.some((item) => item.question.trim());
   return true;
 }
 

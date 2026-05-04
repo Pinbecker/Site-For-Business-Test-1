@@ -13,9 +13,17 @@ interface Props {
 
 const SECTION_LABELS: Record<DesignSettings['sectionOrder'][number], string> = {
   about: 'About',
+  features: 'Features',
   services: 'Services',
+  products: 'Products',
+  process: 'Process',
   gallery: 'Gallery',
+  team: 'Team',
+  credentials: 'Credentials',
+  areas: 'Areas served',
+  promotion: 'Promotion',
   testimonials: 'Reviews',
+  faqs: 'FAQs',
   contact: 'Contact',
 };
 
