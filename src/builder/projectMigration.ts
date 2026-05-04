@@ -95,6 +95,12 @@ export function hydrateProject(input: SiteProject): SiteProject {
   return {
     ...input,
     schemaVersion: SCHEMA_VERSION,
+    project: {
+      ...fallback.project,
+      customerName: input.project?.customerName || input.business?.name || fallback.project.customerName,
+      internalNotes: input.project?.internalNotes ?? fallback.project.internalNotes,
+      status: input.project?.status ?? fallback.project.status,
+    },
     content: {
       ...fallback.content,
       ...input.content,

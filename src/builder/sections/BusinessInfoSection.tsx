@@ -1,4 +1,4 @@
-import type { BusinessInfo, OpeningHoursEntry, SiteProject } from '@/types/project';
+import type { BusinessInfo, OpeningHoursEntry, ProjectMeta, SiteProject } from '@/types/project';
 import { DAYS_ORDER, DAY_LABELS, INDUSTRY_OPTIONS } from '@/types/project';
 import { Field } from '../components/Field';
 import { SectionShell } from '../components/SectionShell';
@@ -6,15 +6,57 @@ import { SectionShell } from '../components/SectionShell';
 interface Props {
   project: SiteProject;
   update: (patch: Partial<BusinessInfo>) => void;
+  updateProject: (patch: Partial<ProjectMeta>) => void;
 }
 
-export function BusinessInfoSection({ project, update }: Props) {
+export function BusinessInfoSection({ project, update, updateProject }: Props) {
   const b = project.business;
+  const meta = project.project;
   const setHour = (day: keyof BusinessInfo['hours'], patch: Partial<OpeningHoursEntry>) => {
     update({ hours: { ...b.hours, [day]: { ...b.hours[day], ...patch } } });
   };
   return (
-    <SectionShell title="Business info" description="The essentials — what you do, how to reach you, and when you're open.">
+    <>
+    <SectionShell
+      title="Client project"
+      description="Private workflow details for you. These are saved in the project file, not displayed on the customer website."
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Customer / project name" required htmlFor="project-customer">
+          <input
+            id="project-customer"
+            className="field-input"
+            value={meta.customerName}
+            onChange={(e) => updateProject({ customerName: e.target.value })}
+            placeholder="e.g. Acme Local website"
+          />
+        </Field>
+        <Field label="Status" htmlFor="project-status">
+          <select
+            id="project-status"
+            className="field-input"
+            value={meta.status}
+            onChange={(e) => updateProject({ status: e.target.value as ProjectMeta['status'] })}
+          >
+            <option value="draft">Draft</option>
+            <option value="waiting-on-client">Waiting on client</option>
+            <option value="ready-to-export">Ready to export</option>
+            <option value="published">Published</option>
+          </select>
+        </Field>
+      </div>
+      <Field label="Internal notes" htmlFor="project-notes" hint="Examples: client preferences, missing assets, revision history, login/deployment reminders.">
+        <textarea
+          id="project-notes"
+          className="field-input min-h-[110px]"
+          value={meta.internalNotes}
+          onChange={(e) => updateProject({ internalNotes: e.target.value })}
+          rows={5}
+        />
+      </Field>
+    </SectionShell>
+
+    <SectionShell title="Business info" description="The public website essentials — what they do, how to reach them, and when they're open.">
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Business name" required htmlFor="biz-name">
           <input
@@ -141,5 +183,6 @@ export function BusinessInfoSection({ project, update }: Props) {
         </div>
       </div>
     </SectionShell>
+    </>
   );
 }

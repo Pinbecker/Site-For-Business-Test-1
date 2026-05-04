@@ -193,6 +193,14 @@ export interface Seo {
   canonicalUrl: string;
 }
 
+export type ProjectStatus = 'draft' | 'waiting-on-client' | 'ready-to-export' | 'published';
+
+export interface ProjectMeta {
+  customerName: string;
+  internalNotes: string;
+  status: ProjectStatus;
+}
+
 export type TemplateId =
   | 'classic-trade'
   | 'editorial-cafe'
@@ -290,6 +298,7 @@ export interface SiteProject {
   id: string;
   createdAt: string;
   updatedAt: string;
+  project: ProjectMeta;
   templateId: TemplateId;
   randomization: RandomizationSeed;
   design: DesignSettings;

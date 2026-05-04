@@ -98,6 +98,17 @@ export function App() {
     downloadBlob(blob, `${filename || 'project'}.project.json`);
   }, [project, filename]);
 
+  const handleNewProject = useCallback(() => {
+    const ok = window.confirm(
+      'Start a fresh client site? Export the current editable project file first if you want to keep working on it later.',
+    );
+    if (!ok) return;
+    const next = defaultProject();
+    setProject(next);
+    setFilename(deriveFilename(next));
+    setStep('business');
+  }, []);
+
   const handleLoad = useCallback((file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -144,20 +155,25 @@ export function App() {
           </div>
           <div>
             <p className="text-sm font-semibold text-ink-900">SiteForge</p>
-            <p className="text-xs text-ink-500">{savedLabel}</p>
+            <p className="text-xs text-ink-500">
+              {project.project.customerName || project.business.name} · {savedLabel}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <button type="button" className="btn-ghost" onClick={handleNewProject}>
+            New client site
+          </button>
           <input
             type="text"
             className="field-input hidden w-56 sm:block"
             value={filename}
             onChange={(e) => setFilename(e.target.value)}
-            aria-label="Export filename"
-            placeholder="filename"
+            aria-label="Export file name"
+            placeholder="export-file-name"
           />
           <button type="button" className="btn-ghost" onClick={() => fileInputRef.current?.click()}>
-            ↑ Load project
+            Open editable project
           </button>
           <input
             ref={fileInputRef}
@@ -171,7 +187,7 @@ export function App() {
             }}
           />
           <button type="button" className="btn-secondary" onClick={handleSaveProjectJson}>
-            ↓ project.json
+            Save editable project
           </button>
           <button
             type="button"
@@ -180,7 +196,7 @@ export function App() {
             disabled={exporting}
             aria-busy={exporting}
           >
-            {exporting ? 'Building ZIP…' : '⬇ Export site (.zip)'}
+            {exporting ? 'Building website ZIP...' : 'Export finished website'}
           </button>
         </div>
       </header>
@@ -190,11 +206,11 @@ export function App() {
           <aside className="hidden border-r border-ink-200 bg-white p-3 lg:block">
             <StepNav steps={STEPS} active={step} onSelect={(id) => setStep(id as StepId)} />
             <div className="mt-6 rounded-lg bg-ink-50 p-3 text-xs text-ink-600">
-              <p className="font-medium text-ink-800">Tips</p>
+              <p className="font-medium text-ink-800">Workflow</p>
               <ul className="mt-1 list-disc space-y-1 pl-4">
-                <li>Pick a site strategy, then tune the design controls per client.</li>
-                <li>Use Regenerate to vary font pairings while keeping content intact.</li>
-                <li>Export downloads a self-contained, deployable ZIP.</li>
+                <li>Use New client site when starting another customer.</li>
+                <li>Save editable project creates the file you reopen later.</li>
+                <li>Export finished website creates the deployable ZIP.</li>
               </ul>
             </div>
           </aside>
@@ -218,7 +234,11 @@ export function App() {
 
             <div className="space-y-5">
               {step === 'business' ? (
-                <BusinessInfoSection project={project} update={(patch) => update('business', patch)} />
+                <BusinessInfoSection
+                  project={project}
+                  update={(patch) => update('business', patch)}
+                  updateProject={(patch) => update('project', patch)}
+                />
               ) : null}
               {step === 'brand' ? (
                 <BrandSection project={project} update={(patch) => update('brand', patch)} />
@@ -273,7 +293,7 @@ export function App() {
 
 function deriveFilename(project: SiteProject): string {
   return (
-    project.business.name
+    (project.project.customerName || project.business.name)
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')

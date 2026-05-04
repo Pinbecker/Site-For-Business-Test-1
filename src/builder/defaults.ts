@@ -111,6 +111,12 @@ export function defaultProject(): SiteProject {
     id: newId('prj'),
     createdAt: now,
     updatedAt: now,
+    project: {
+      customerName: 'Acme Local',
+      internalNotes:
+        'Internal notes for this client project. Use this for reminders, client preferences, revision notes, or deployment details.',
+      status: 'draft',
+    },
     templateId: 'classic-trade',
     randomization: { seed: newSeed() },
     design: defaultDesignSettings(),
