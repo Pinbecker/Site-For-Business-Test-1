@@ -86,6 +86,7 @@ function Badge({ children, tone }: { children: string; tone: 'green' | 'dark' })
 
 function TemplateThumbnail({ id }: { id: TemplateId }) {
   const base = 'h-28 overflow-hidden rounded-lg ring-1 ring-black/10';
+
   if (id === 'hospitality-editorial') {
     return (
       <span className={`${base} grid grid-cols-[.8fr_1.2fr] bg-[#f7ead8]`}>
@@ -101,6 +102,7 @@ function TemplateThumbnail({ id }: { id: TemplateId }) {
       </span>
     );
   }
+
   if (id === 'portfolio-studio') {
     return (
       <span className={`${base} grid grid-cols-3 grid-rows-3 gap-1 bg-[#101010] p-2`}>
@@ -112,6 +114,7 @@ function TemplateThumbnail({ id }: { id: TemplateId }) {
       </span>
     );
   }
+
   if (id === 'expert-firm') {
     return (
       <span className={`${base} grid grid-cols-[.42fr_1fr] bg-[#eef2f6]`}>
@@ -125,6 +128,69 @@ function TemplateThumbnail({ id }: { id: TemplateId }) {
       </span>
     );
   }
+
+  if (id === 'lumina-wellness') {
+    return (
+      <span className={`${base} flex flex-col items-center justify-center gap-2 bg-[#faf8f5] p-3`}>
+        <span className="h-14 w-24 rounded-full bg-[#e8d5c4]" />
+        <span className="space-y-1 text-center">
+          <span className="block h-2 w-20 rounded bg-[#5c3d28] mx-auto" />
+          <span className="block h-2 w-14 rounded bg-[#c49a6c] mx-auto" />
+        </span>
+      </span>
+    );
+  }
+
+  if (id === 'vivid-bold') {
+    return (
+      <span className={`${base} relative bg-[#08090b] p-3 flex flex-col justify-end`}>
+        <span className="absolute inset-0 bg-gradient-to-b from-transparent to-[#08090b]" />
+        <span className="relative space-y-1">
+          <span className="block h-5 w-3/4 rounded-sm bg-white" />
+          <span className="block h-3 w-1/2 rounded-sm bg-white/40" />
+          <span className="block h-6 w-20 rounded-none bg-[#22c55e] mt-2" />
+        </span>
+      </span>
+    );
+  }
+
+  if (id === 'hearth-local') {
+    return (
+      <span className={`${base} relative bg-[#1b3326] flex flex-col justify-end`}>
+        <span className="absolute inset-0 bg-[#3b2718] opacity-40" />
+        <span className="relative p-3 space-y-1">
+          <span className="block h-2 w-16 rounded bg-white/40" />
+          <span className="block h-4 w-3/4 rounded bg-white/90" />
+          <span className="block h-4 w-2/3 rounded bg-white/90" />
+          <span className="block h-5 w-24 rounded-full bg-[#fdf6e8]/90 mt-1" />
+        </span>
+      </span>
+    );
+  }
+
+  if (id === 'slate-minimal') {
+    return (
+      <span className={`${base} bg-white p-4 flex flex-col justify-between`}>
+        <span className="space-y-2">
+          <span className="block h-1 w-8 bg-[#6366f1]" />
+          <span className="block h-4 w-3/4 bg-[#1a1a1c]" />
+          <span className="block h-4 w-1/2 bg-[#1a1a1c]" />
+        </span>
+        <span className="space-y-1">
+          <span className="flex justify-between items-center border-t border-[#e8e8ec] pt-1">
+            <span className="h-2 w-1/2 bg-[#767680] rounded" />
+            <span className="h-2 w-8 bg-[#6366f1] rounded" />
+          </span>
+          <span className="flex justify-between items-center border-t border-[#e8e8ec] pt-1">
+            <span className="h-2 w-2/5 bg-[#767680] rounded" />
+            <span className="h-2 w-10 bg-[#6366f1] rounded" />
+          </span>
+        </span>
+      </span>
+    );
+  }
+
+  // Default: service-pro
   return (
     <span className={`${base} grid grid-rows-[auto_1fr] bg-[#f4f7fb]`}>
       <span className="grid grid-cols-[1fr_auto] gap-2 border-b border-[#1d4ed8] p-2">

@@ -205,7 +205,11 @@ export type TemplateId =
   | 'service-pro'
   | 'hospitality-editorial'
   | 'portfolio-studio'
-  | 'expert-firm';
+  | 'expert-firm'
+  | 'lumina-wellness'
+  | 'vivid-bold'
+  | 'hearth-local'
+  | 'slate-minimal';
 
 export interface RandomizationSeed {
   /** Numeric seed used by the templates' deterministic randomizer. */

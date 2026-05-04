@@ -17,6 +17,42 @@ import {
 
 /* ─── Template metadata ──────────────────────────────────────────────────── */
 
+const LUMINA_META: TemplateMeta = {
+  id: 'lumina-wellness',
+  name: 'Lumina Wellness',
+  description:
+    'A serene, luxury template for spas, salons, yoga studios, wellness clinics, and beauty brands that lead with feeling.',
+  bestFor: ['fitness-wellness', 'hair-beauty', 'cafe-restaurant'],
+  vibe: 'Serene / luxurious / softly beautiful',
+};
+
+const VIVID_META: TemplateMeta = {
+  id: 'vivid-bold',
+  name: 'Vivid',
+  description:
+    'A high-energy template for gyms, fitness studios, streetwear brands, events, and any business that demands attention.',
+  bestFor: ['fitness-wellness', 'retail-shop', 'other'],
+  vibe: 'Bold / energetic / unapologetic',
+};
+
+const HEARTH_META: TemplateMeta = {
+  id: 'hearth-local',
+  name: 'Hearth',
+  description:
+    'A warm, artisan template for bakeries, farm shops, delis, independent retailers, and community-rooted businesses.',
+  bestFor: ['cafe-restaurant', 'retail-shop', 'other'],
+  vibe: 'Warm / artisan / community-rooted',
+};
+
+const SLATE_META: TemplateMeta = {
+  id: 'slate-minimal',
+  name: 'Slate',
+  description:
+    'A razor-precise minimal template for architects, designers, agencies, and brands where restraint is the statement.',
+  bestFor: ['professional-services', 'other', 'trades-contractor'],
+  vibe: 'Minimal / precise / considered',
+};
+
 const SERVICE_META: TemplateMeta = {
   id: 'service-pro',
   name: 'Service Pro',
@@ -77,6 +113,30 @@ export const TEMPLATE_EXPERT: TemplateModule = {
   meta: EXPERT_META,
   css: expertCss,
   body: expertBody,
+};
+
+export const TEMPLATE_LUMINA: TemplateModule = {
+  meta: LUMINA_META,
+  css: luminaCss,
+  body: luminaBody,
+};
+
+export const TEMPLATE_VIVID: TemplateModule = {
+  meta: VIVID_META,
+  css: vividCss,
+  body: vividBody,
+};
+
+export const TEMPLATE_HEARTH: TemplateModule = {
+  meta: HEARTH_META,
+  css: hearthCss,
+  body: hearthBody,
+};
+
+export const TEMPLATE_SLATE: TemplateModule = {
+  meta: SLATE_META,
+  css: slateCss,
+  body: slateBody,
 };
 
 /* ─── Shared mini-utilities ──────────────────────────────────────────────── */
@@ -420,7 +480,6 @@ function serviceBody(project: SiteProject): string {
   const servicePreview = services.slice(0, 4);
 
   return `
-    <a href="#main" class="skip-link">Skip to content</a>
     <header class="sp-header" id="top" data-header>
       <div class="container sp-header__inner">
         ${logoOrName(project)}
@@ -813,7 +872,6 @@ function hospitalityBody(project: SiteProject): string {
   const featureItems = features(project);
 
   return `
-    <a href="#main" class="skip-link">Skip to content</a>
     <header class="he-header" id="top" data-header>
       <div class="container he-header__inner">
         ${logoOrName(project)}
@@ -1157,7 +1215,6 @@ function portfolioBody(project: SiteProject): string {
   const featureItems = features(project);
 
   return `
-    <a href="#main" class="skip-link">Skip to content</a>
     <header class="ps-header" id="top" data-header>
       <div class="container ps-header__inner">
         ${logoOrName(project)}
@@ -1497,7 +1554,6 @@ function expertBody(project: SiteProject): string {
   const faqItems = faqs(project);
 
   return `
-    <a href="#main" class="skip-link">Skip to content</a>
     <div class="ef-layout">
       <aside class="ef-sidebar" id="top">
         ${logoOrName(project)}
@@ -1614,4 +1670,1376 @@ function expertBody(project: SiteProject): string {
         </footer>
       </div>
     </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LUMINA WELLNESS
+   Concept: Serene luxury spa/wellness. EB Garamond italic serifs, cream
+   palette, large organic imagery, softly beautiful throughout.
+════════════════════════════════════════════════════════════════════════════ */
+
+function luminaCss(project: SiteProject): string {
+  const primary = project.brand.primaryColor;
+  const onPrimary = readableOn(primary);
+  const primaryLight = tint(primary, 0.88);
+  const primaryMid = tint(primary, 0.55);
+  const primaryDark = shade(primary, 0.16);
+  return `/* === Lumina Wellness ======================================= */
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&family=Nunito:wght@300;400;500;600;700&display=swap");
+${visuallyHiddenCss()}
+:root{
+  --c-primary:${primary};
+  --c-primary-light:${primaryLight};
+  --c-primary-mid:${primaryMid};
+  --c-primary-dark:${primaryDark};
+  --c-on-primary:${onPrimary};
+  --c-cream:#faf8f5;
+  --c-cream-2:#f3ede5;
+  --c-cream-3:#ebe1d5;
+  --c-espresso:#241a14;
+  --c-ink:#2e221a;
+  --c-ink-2:#8a7060;
+  --c-line:#ddd0c4;
+  --max:1120px;
+  --pad:clamp(1.5rem,4vw,3rem);
+  --sh:0 2px 6px rgba(36,26,20,.04),0 12px 36px rgba(36,26,20,.09);
+  --sh-lg:0 4px 10px rgba(36,26,20,.05),0 24px 70px rgba(36,26,20,.14);
+  --r:20px;
+}
+body{font-family:"Nunito",system-ui,sans-serif;background:var(--c-cream);color:var(--c-ink);line-height:1.75;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:"EB Garamond",Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em;line-height:.96}
+h3{font-family:"Nunito",sans-serif;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+h1{font-size:clamp(3.2rem,9vw,8.5rem)}
+h2{font-size:clamp(2.2rem,5.5vw,5.2rem)}
+h3{font-size:clamp(1rem,1.4vw,1.15rem)}
+p{color:var(--c-ink-2);line-height:1.78}
+section{padding-block:clamp(4.5rem,9vw,8rem)}
+
+/* Header */
+.lw-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(250,248,245,.88);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  border-bottom:1px solid var(--c-line);
+  transition:background .3s,box-shadow .3s
+}
+.lw-header[data-scrolled="true"]{background:rgba(250,248,245,.97);box-shadow:0 1px 0 var(--c-line),0 8px 32px rgba(36,26,20,.06)}
+.lw-header__inner{height:80px;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.brand-mark{font-family:"EB Garamond",Georgia,serif;font-style:italic;font-size:1.4rem;color:var(--c-espresso)}
+.brand-mark img{max-height:40px;width:auto}
+[data-nav]{display:none;position:fixed;inset:80px 0 auto 0;background:var(--c-cream);border-bottom:1px solid var(--c-line);padding:1.25rem var(--pad)}
+[data-nav][data-open="true"]{display:block}
+[data-nav] ul{display:grid;gap:.5rem}
+[data-nav] a{display:block;padding:.6rem 0;font-weight:500;color:var(--c-ink);border-bottom:1px solid var(--c-line)}
+@media(min-width:880px){
+  [data-nav]{display:block;position:static;padding:0;border:0;background:transparent}
+  [data-nav] ul{display:flex;gap:.25rem}
+  [data-nav] a{padding:.4rem .75rem;border:0;font-size:.875rem;color:var(--c-ink-2);letter-spacing:.03em}
+  [data-nav] a:hover{color:var(--c-ink)}
+}
+.cta--primary{background:var(--c-espresso);color:#fff;border-radius:999px;letter-spacing:.04em;font-size:.875rem}
+.cta--primary:hover{background:var(--c-ink)}
+.cta--ghost{border:1px solid var(--c-line);border-radius:999px;color:var(--c-ink);letter-spacing:.04em;font-size:.875rem}
+.cta--ghost:hover{border-color:var(--c-ink)}
+.lw-header .cta--primary{padding:.6rem 1.5rem}
+
+/* Kicker */
+.lw-kicker{
+  display:inline-flex;align-items:center;gap:.65rem;
+  font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--c-primary)
+}
+
+/* Hero */
+.lw-hero{
+  min-height:100svh;
+  display:grid;grid-template-rows:1fr auto;
+  align-items:center;
+  text-align:center;
+  padding:var(--pad);padding-top:120px;
+  position:relative;overflow:hidden
+}
+.lw-hero__bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 30%,${primaryLight}55 0%,transparent 65%),
+    radial-gradient(ellipse 50% 40% at 80% 80%,${tint(primary, 0.92)}44 0%,transparent 60%),
+    linear-gradient(180deg,var(--c-cream) 0%,var(--c-cream-2) 100%)
+}
+.lw-hero__copy{position:relative;z-index:1;max-width:900px;margin-inline:auto}
+.lw-hero h1{margin:.75rem auto 1.5rem;max-width:12ch;text-wrap:balance;color:var(--c-espresso)}
+.lw-hero__sub{font-size:clamp(1.05rem,1.4vw,1.25rem);max-width:44ch;margin:0 auto 2.25rem;color:var(--c-ink-2)}
+.lw-hero__ctas{display:flex;flex-wrap:wrap;gap:.875rem;justify-content:center}
+.lw-hero__image{
+  position:relative;z-index:1;
+  margin-top:4rem;
+  height:clamp(260px,38vw,480px);
+  border-radius:999px 999px 40px 40px;
+  overflow:hidden;
+  box-shadow:var(--sh-lg);
+  max-width:700px;margin-inline:auto
+}
+.lw-hero__image img{width:100%;height:100%;object-fit:cover}
+
+/* Services */
+.lw-services{background:var(--c-cream)}
+.lw-services__grid{display:grid;gap:0;border-top:1px solid var(--c-line)}
+.lw-service{
+  display:grid;grid-template-columns:1fr auto;gap:1rem;
+  align-items:start;
+  padding:1.75rem 0;
+  border-bottom:1px solid var(--c-line);
+  transition:background .18s
+}
+.lw-service:hover{padding-left:.75rem;padding-right:.75rem;margin-inline:-.75rem;border-radius:14px;border-bottom-color:transparent;background:#fff;box-shadow:var(--sh)}
+.lw-service h3{color:var(--c-ink);margin-bottom:.5rem;font-size:1.05rem}
+.lw-service p{font-size:.9375rem}
+.lw-service__price{font-family:"EB Garamond",serif;font-size:1.3rem;font-style:italic;color:var(--c-primary);white-space:nowrap;padding-top:.25rem}
+
+/* About / split sections */
+.lw-about{background:var(--c-cream-2)}
+.lw-about__grid{display:grid;gap:3rem}
+@media(min-width:900px){.lw-about__grid{grid-template-columns:1fr 1fr;align-items:center;gap:5rem}}
+.lw-about__image{border-radius:40px 40px 999px 999px;overflow:hidden;aspect-ratio:4/5;box-shadow:var(--sh-lg)}
+.lw-about__image img{width:100%;height:100%;object-fit:cover}
+.lw-about__text h2{margin:.75rem 0 1.25rem;color:var(--c-espresso)}
+.lw-feature{padding:.875rem 0;border-bottom:1px solid var(--c-line)}
+.lw-feature h3{color:var(--c-espresso);margin-bottom:.35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;font-family:"Nunito",sans-serif}
+
+/* Gallery */
+.lw-gallery{background:var(--c-cream)}
+.lw-gallery__grid{
+  display:grid;gap:clamp(.75rem,1.5vw,1.25rem);
+  grid-template-columns:repeat(2,1fr)
+}
+@media(min-width:760px){
+  .lw-gallery__grid{grid-template-columns:repeat(3,1fr)}
+  .lw-gallery__grid figure:first-child{grid-column:span 2;grid-row:span 2}
+}
+.lw-gallery__grid figure{
+  overflow:hidden;min-height:220px;
+  border-radius:999px 40px 999px 40px;
+  box-shadow:var(--sh)
+}
+.lw-gallery__grid figure:nth-child(even){border-radius:40px 999px 40px 999px}
+.lw-gallery__grid img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.lw-gallery__grid figure:hover img{transform:scale(1.06)}
+
+/* Testimonials */
+.lw-testimonials{background:var(--c-cream-3)}
+.lw-testimonials__grid{display:grid;gap:1.5rem}
+@media(min-width:760px){.lw-testimonials__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1060px){.lw-testimonials__grid{grid-template-columns:repeat(3,1fr)}}
+.lw-testimonial{
+  background:#fff;border-radius:24px;padding:2rem;
+  box-shadow:var(--sh);
+  display:flex;flex-direction:column;gap:1.25rem
+}
+.lw-testimonial__quote{
+  font-family:"EB Garamond",serif;font-style:italic;
+  font-size:1.2rem;line-height:1.55;color:var(--c-espresso);flex:1
+}
+.lw-testimonial cite{
+  display:block;font-style:normal;
+  font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--c-primary)
+}
+
+/* Process */
+.lw-process{background:var(--c-cream-2)}
+.lw-process__grid{display:grid;gap:1.25rem}
+@media(min-width:640px){.lw-process__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.lw-process__grid{grid-template-columns:repeat(4,1fr)}}
+.lw-step{background:#fff;border-radius:24px;padding:1.75rem;box-shadow:var(--sh);position:relative;overflow:hidden}
+.lw-step::before{content:attr(data-n);position:absolute;right:.5rem;top:-.3em;font-family:"EB Garamond",serif;font-size:5rem;font-style:italic;color:${primaryLight};line-height:1;pointer-events:none}
+.lw-step h3{margin:.5rem 0;color:var(--c-espresso)}
+
+/* Contact */
+.lw-contact{background:var(--c-cream)}
+.lw-contact__grid{display:grid;gap:3rem}
+@media(min-width:900px){.lw-contact__grid{grid-template-columns:1fr 1fr;align-items:start}}
+.contact-line{display:flex;flex-direction:column;gap:.2rem;padding:.875rem 0;border-bottom:1px solid var(--c-line)}
+.contact-line strong{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--c-ink-2);font-weight:700}
+.contact-line span,.contact-line a{color:var(--c-ink);font-weight:400;font-size:1rem}
+.contact-line a:hover{color:var(--c-primary)}
+.hours-list{background:var(--c-cream-2);border-radius:16px;padding:1.25rem;margin-top:1.25rem;border:1px solid var(--c-line)}
+.hours-row{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.9375rem}
+.hours-row__day{font-weight:600;color:var(--c-ink)}
+.hours-row__time{color:var(--c-ink-2)}
+.map-embed{margin-top:1.25rem;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--c-line)}
+.map-embed iframe{width:100%;height:100%;border:0}
+.contact-form{display:grid;gap:1.25rem;background:#fff;border-radius:24px;padding:2rem;box-shadow:var(--sh-lg);border:1px solid var(--c-line)}
+.contact-form__row{display:grid;gap:1.25rem}
+@media(min-width:640px){.contact-form__row{grid-template-columns:1fr 1fr}}
+.contact-form__field{display:grid;gap:.45rem}
+.contact-form__field span{font-size:.78rem;font-weight:700;color:var(--c-ink);letter-spacing:.06em;text-transform:uppercase}
+.contact-form input,.contact-form textarea{border:1px solid var(--c-line);border-radius:999px;padding:.8rem 1.1rem;background:var(--c-cream);color:var(--c-ink);font-size:.9375rem;transition:border-color .18s,box-shadow .18s}
+.contact-form textarea{border-radius:16px}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--c-primary);box-shadow:0 0 0 4px ${primaryLight}66;outline:none}
+.contact-form button[type="submit"]{background:var(--c-espresso);color:#fff;border-radius:999px;padding:1rem 2.25rem;font-size:.9375rem;font-weight:600;letter-spacing:.04em;transition:background .2s,transform .2s}
+.contact-form button[type="submit"]:hover{background:var(--c-ink);transform:translateY(-2px)}
+
+/* Footer */
+.lw-footer{background:var(--c-espresso);color:rgba(255,255,255,.6);padding:clamp(2rem,4vw,3.5rem) 0}
+.lw-footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.lw-footer strong{font-family:"EB Garamond",serif;font-style:italic;font-size:1.3rem;color:#fff}
+.lw-footer p{font-size:.8125rem;color:rgba(255,255,255,.35);margin-top:.2rem}
+.social-links{display:flex;gap:.5rem}
+.social-links a{display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.14);border-radius:999px;color:rgba(255,255,255,.5);transition:background .18s,color .18s}
+.social-links a:hover{background:rgba(255,255,255,.1);color:#fff}
+.social-links svg{width:16px;height:16px}`;
+}
+
+function luminaBody(project: SiteProject): string {
+  const image = firstImage(project);
+  const services = servicesList(project.content.services);
+  const gallery = project.content.gallery;
+  const steps = processSteps(project);
+  const testimonials = testimonialsList(project.content.testimonials);
+  const featureItems = features(project);
+
+  return `
+    <header class="lw-header" id="top" data-header>
+      <div class="container lw-header__inner">
+        ${logoOrName(project)}
+        <button type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span></span></button>
+        <nav id="primary-nav" data-nav data-open="false" aria-label="Primary">
+          <ul>
+            <li><a href="#services">Services</a></li>
+            ${featureItems.length ? '<li><a href="#about">About</a></li>' : ''}
+            ${gallery.length ? '<li><a href="#gallery">Gallery</a></li>' : ''}
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="cta cta--primary" href="#contact">Book now</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="lw-hero" aria-labelledby="hero-title">
+        <div class="lw-hero__bg"></div>
+        <div class="container" style="position:relative;z-index:1">
+          <div class="lw-hero__copy">
+            <p class="lw-kicker">${escapeHtml(project.seo.cityRegion || industryLabel(project))}</p>
+            <h1 id="hero-title">${escapeHtml(project.business.name)}</h1>
+            <p class="lw-hero__sub">${escapeHtml(project.business.tagline)}</p>
+            <div class="lw-hero__ctas">
+              <a class="cta cta--primary" href="#contact">Book a session</a>
+              <a class="cta cta--ghost" href="#services">Explore services</a>
+            </div>
+          </div>
+          ${image ? `<div class="lw-hero__image">${imgTag(image, { loading: 'eager' })}</div>` : ''}
+        </div>
+      </section>
+
+      <section class="lw-services" id="services" aria-labelledby="services-title">
+        <div class="container">
+          <div style="display:grid;gap:1rem;max-width:580px;margin-bottom:clamp(2rem,4vw,3.5rem)" data-reveal>
+            <p class="lw-kicker">Services</p>
+            <h2 id="services-title">What we offer</h2>
+          </div>
+          <div class="lw-services__grid">
+            ${services.map((s, i) => `
+              <div class="lw-service" data-reveal data-delay="${i * 50}">
+                <div>
+                  <h3>${escapeHtml(s.name)}</h3>
+                  <p>${escapeHtml(s.description)}</p>
+                </div>
+                ${s.price ? `<span class="lw-service__price">${escapeHtml(s.price)}</span>` : ''}
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      ${featureItems.length ? `
+      <section class="lw-about" id="about" aria-labelledby="about-title">
+        <div class="container lw-about__grid">
+          ${image ? `<div class="lw-about__image" data-reveal="left">${imgTag(image)}</div>` : ''}
+          <div class="lw-about__text" data-reveal="right">
+            <p class="lw-kicker">Our story</p>
+            <h2 id="about-title">${escapeHtml(project.business.name)}</h2>
+            <p style="margin-bottom:1.5rem">${escapeHtml(project.content.about)}</p>
+            ${featureItems.map((f) => `
+              <div class="lw-feature">
+                <h3>${escapeHtml(f.title)}</h3>
+                <p>${escapeHtml(f.description)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${steps.length ? `
+      <section class="lw-process" aria-labelledby="process-title">
+        <div class="container">
+          <div style="margin-bottom:clamp(2rem,4vw,3.5rem);text-align:center" data-reveal>
+            <p class="lw-kicker">The experience</p>
+            <h2 id="process-title">How it works</h2>
+          </div>
+          <div class="lw-process__grid">
+            ${steps.map((s, i) => `
+              <div class="lw-step" data-n="${String(i + 1).padStart(2, '0')}" data-reveal data-delay="${i * 80}">
+                <h3>${escapeHtml(s.title)}</h3>
+                <p>${escapeHtml(s.description)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${gallery.length ? `
+      <section class="lw-gallery" id="gallery" aria-labelledby="gallery-title">
+        <div class="container">
+          <div style="margin-bottom:clamp(2rem,4vw,3.5rem);text-align:center" data-reveal>
+            <p class="lw-kicker">Gallery</p>
+            <h2 id="gallery-title">The space &amp; the feeling</h2>
+          </div>
+          <div class="lw-gallery__grid" data-lightbox>
+            ${gallery.map((g) => `<figure>${imgTag(g)}</figure>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${testimonials.length ? `
+      <section class="lw-testimonials" aria-label="Reviews">
+        <div class="container">
+          <div style="margin-bottom:clamp(2rem,4vw,3.5rem);text-align:center" data-reveal>
+            <p class="lw-kicker">Reviews</p>
+            <h2>What clients say</h2>
+          </div>
+          <div class="lw-testimonials__grid">
+            ${testimonials.map((t, i) => `
+              <article class="lw-testimonial" data-reveal data-delay="${i * 70}">
+                <p class="lw-testimonial__quote">"${escapeHtml(t.quote)}"</p>
+                <cite>${escapeHtml(t.customerName)}</cite>
+              </article>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      <section class="lw-contact" id="contact" aria-labelledby="contact-title">
+        <div class="container">
+          <div class="lw-contact__grid">
+            <div data-reveal="left">
+              <p class="lw-kicker">Book &amp; visit</p>
+              <h2 id="contact-title" style="margin:.75rem 0 1.5rem">Ready to begin?</h2>
+              ${contactBlock(project)}
+              ${hoursList(project)}
+              ${mapEmbed(project)}
+            </div>
+            <div data-reveal="right">${netlifyFormFields(project)}</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="lw-footer">
+      <div class="container lw-footer__inner">
+        <div>
+          <strong>${escapeHtml(project.business.name)}</strong>
+          <p>© <span data-year>${new Date().getFullYear()}</span>. All rights reserved.</p>
+        </div>
+        <div>${socialLinks(project)}</div>
+      </div>
+    </footer>`;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   VIVID
+   Concept: Bold energy for gyms, fitness studios, events, streetwear.
+   Barlow Condensed at massive scale, near-black body, electric brand accent.
+════════════════════════════════════════════════════════════════════════════ */
+
+function vividCss(project: SiteProject): string {
+  const primary = project.brand.primaryColor;
+  const onPrimary = readableOn(primary);
+  const primaryDark = shade(primary, 0.18);
+  return `/* === Vivid ================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,900&family=Barlow:wght@400;500;600;700&display=swap");
+${visuallyHiddenCss()}
+:root{
+  --c-primary:${primary};
+  --c-on-primary:${onPrimary};
+  --c-primary-dark:${primaryDark};
+  --c-bg:#08090b;
+  --c-surface:#111316;
+  --c-surface-2:#18191e;
+  --c-ink:#f4f4f2;
+  --c-ink-2:#888993;
+  --c-line:#22252d;
+  --max:1280px;
+  --pad:clamp(1.25rem,4vw,2.5rem);
+}
+body{font-family:"Barlow",system-ui,sans-serif;background:var(--c-bg);color:var(--c-ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:900;text-transform:uppercase;line-height:.92;letter-spacing:-.01em}
+h1{font-size:clamp(4rem,14vw,14rem)}
+h2{font-size:clamp(2.5rem,7vw,7.5rem)}
+h3{font-size:clamp(1.1rem,2vw,1.5rem);font-weight:800;letter-spacing:.02em}
+p{color:var(--c-ink-2);line-height:1.7}
+section{padding-block:clamp(4rem,8vw,7rem)}
+
+/* Header */
+.vi-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  border-bottom:1px solid var(--c-line);
+  transition:background .3s
+}
+.vi-header,.vi-header[data-scrolled="false"]{background:rgba(8,9,11,.6);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)}
+.vi-header[data-scrolled="true"]{background:rgba(8,9,11,.96)}
+.vi-header__inner{height:72px;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.brand-mark{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:1.3rem;letter-spacing:.08em;text-transform:uppercase;color:var(--c-ink)}
+.brand-mark img{max-height:36px;width:auto}
+[data-nav]{display:none;position:fixed;inset:72px 0 auto 0;background:var(--c-bg);border-bottom:1px solid var(--c-line);padding:1.25rem var(--pad)}
+[data-nav][data-open="true"]{display:block}
+[data-nav] a{display:block;padding:.65rem 0;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:1.4rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--c-line);color:var(--c-ink)}
+@media(min-width:880px){
+  [data-nav]{display:block;position:static;padding:0;border:0;background:transparent}
+  [data-nav] ul{display:flex;gap:1.5rem}
+  [data-nav] a{padding:0;border:0;font-size:.78rem;color:var(--c-ink-2);letter-spacing:.14em}
+  [data-nav] a:hover{color:var(--c-primary)}
+}
+.cta--primary{background:var(--c-primary);color:var(--c-on-primary);border-radius:0;letter-spacing:.1em;text-transform:uppercase;font-weight:700;font-family:"Barlow Condensed",sans-serif;font-size:.9rem}
+.cta--primary:hover{background:var(--c-primary-dark)}
+.cta--ghost{border:2px solid var(--c-line);border-radius:0;color:var(--c-ink);letter-spacing:.1em;text-transform:uppercase;font-weight:700;font-family:"Barlow Condensed",sans-serif;font-size:.9rem}
+.cta--ghost:hover{border-color:var(--c-primary);color:var(--c-primary)}
+.vi-header .cta--primary{padding:.55rem 1.5rem}
+
+/* Kicker */
+.vi-kicker{display:inline-flex;align-items:center;gap:.65rem;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--c-primary)}
+.vi-kicker::after{content:"";width:40px;height:2px;background:currentColor;flex-shrink:0}
+
+/* Hero */
+.vi-hero{
+  min-height:100svh;padding-top:72px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:flex-end
+}
+.vi-hero__bg{position:absolute;inset:0;z-index:0}
+.vi-hero__bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.35) saturate(.8)}
+.vi-hero__bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(8,9,11,.2) 0%,rgba(8,9,11,.8) 70%,rgba(8,9,11,1) 100%)
+}
+.vi-hero__inner{
+  position:relative;z-index:1;
+  padding-block:clamp(3rem,6vw,5rem);
+  width:100%
+}
+.vi-hero h1{color:#fff;max-width:14ch;line-height:.88}
+.vi-hero h1 em{color:var(--c-primary);font-style:normal}
+.vi-hero__sub{font-size:clamp(1rem,1.4vw,1.2rem);max-width:48ch;margin:1.5rem 0 2rem;color:rgba(255,255,255,.7)!important}
+.vi-hero__ctas{display:flex;flex-wrap:wrap;gap:1rem}
+.vi-hero__ctas .cta--primary{padding:1rem 2.5rem;font-size:1rem}
+.vi-hero__ctas .cta--ghost{padding:1rem 2.5rem;font-size:1rem}
+
+/* Ticker strip */
+.vi-ticker{
+  background:var(--c-primary);padding:.8rem 0;overflow:hidden;
+  white-space:nowrap
+}
+.vi-ticker__inner{
+  display:inline-flex;gap:3rem;
+  animation:ticker 18s linear infinite
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.vi-ticker__item{
+  display:inline-flex;align-items:center;gap:.75rem;
+  font-family:"Barlow Condensed",sans-serif;font-weight:800;
+  font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--c-on-primary)
+}
+.vi-ticker__item::before{content:"★";font-size:.65rem}
+
+/* Services */
+.vi-services{background:var(--c-surface)}
+.vi-services__grid{display:grid;gap:1px;background:var(--c-line)}
+@media(min-width:640px){.vi-services__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.vi-services__grid{grid-template-columns:repeat(3,1fr)}}
+.vi-service{
+  background:var(--c-surface);padding:2rem;
+  display:flex;flex-direction:column;gap:.875rem;
+  min-height:220px;transition:background .18s
+}
+.vi-service:hover{background:var(--c-surface-2)}
+.vi-service h3{color:var(--c-ink)}
+.vi-service p{font-size:.9375rem;flex:1}
+.vi-service__price{font-family:"Barlow Condensed",sans-serif;font-size:1.3rem;font-weight:800;color:var(--c-primary);letter-spacing:.02em}
+
+/* About */
+.vi-about{background:var(--c-bg)}
+.vi-about__grid{display:grid;gap:3rem}
+@media(min-width:900px){.vi-about__grid{grid-template-columns:1fr 1fr;align-items:center;gap:5rem}}
+.vi-about__image{aspect-ratio:4/5;overflow:hidden;position:relative}
+.vi-about__image img{width:100%;height:100%;object-fit:cover;filter:saturate(.85)}
+.vi-about__image::after{content:"";position:absolute;inset:0;outline:1px solid rgba(255,255,255,.08) inset}
+.vi-about h2{color:var(--c-ink);margin:.75rem 0 1.25rem}
+.vi-about__lead{font-size:clamp(1rem,1.3vw,1.15rem);color:rgba(255,255,255,.72)!important;margin-bottom:1.5rem}
+.vi-feature{border-top:1px solid var(--c-line);padding:1rem 0}
+.vi-feature h3{color:var(--c-ink);margin-bottom:.3rem}
+
+/* Process */
+.vi-process{background:var(--c-surface-2)}
+.vi-process__grid{display:grid;gap:1px;background:var(--c-line)}
+@media(min-width:760px){.vi-process__grid{grid-template-columns:repeat(3,1fr)}}
+.vi-card{background:var(--c-surface);padding:2rem;position:relative;overflow:hidden}
+.vi-card__num{
+  font-family:"Barlow Condensed",sans-serif;font-weight:900;
+  font-size:6rem;line-height:1;
+  color:rgba(255,255,255,.04);
+  position:absolute;right:.25rem;top:-.1em;
+  pointer-events:none
+}
+.vi-card h3{color:var(--c-ink);margin-bottom:.5rem;position:relative}
+.vi-card p{position:relative}
+
+/* Testimonials */
+.vi-testimonials{background:var(--c-bg)}
+.vi-testimonials__grid{display:grid;gap:1.25rem}
+@media(min-width:760px){.vi-testimonials__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1060px){.vi-testimonials__grid{grid-template-columns:repeat(3,1fr)}}
+.vi-testimonial{background:var(--c-surface);border:1px solid var(--c-line);padding:1.75rem;transition:border-color .2s}
+.vi-testimonial:hover{border-color:rgba(255,255,255,.12)}
+.vi-testimonial p{font-size:.9375rem;font-style:italic;margin-bottom:1.25rem;color:rgba(255,255,255,.65)!important}
+.vi-testimonial cite{display:block;font-style:normal;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:var(--c-primary)}
+
+/* Contact */
+.vi-contact{background:var(--c-surface)}
+.vi-contact__grid{display:grid;gap:3rem}
+@media(min-width:900px){.vi-contact__grid{grid-template-columns:1fr 1fr;align-items:start}}
+.contact-line{display:flex;flex-direction:column;gap:.2rem;padding:.875rem 0;border-bottom:1px solid var(--c-line)}
+.contact-line strong{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--c-ink-2);font-weight:700}
+.contact-line span,.contact-line a{color:var(--c-ink);font-weight:500}
+.contact-line a:hover{color:var(--c-primary)}
+.hours-list,.contact-form{background:var(--c-surface-2);color:var(--c-ink);border:1px solid var(--c-line);padding:1.5rem}
+.hours-row{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.9375rem}
+.hours-row__day{font-weight:600;color:var(--c-ink)}
+.hours-row__time{color:var(--c-ink-2)}
+.hours-list{margin-top:1.25rem}
+.contact-form{display:grid;gap:1.25rem}
+.contact-form__row{display:grid;gap:1.25rem}
+@media(min-width:640px){.contact-form__row{grid-template-columns:1fr 1fr}}
+.contact-form__field{display:grid;gap:.4rem}
+.contact-form__field span{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--c-ink-2)}
+.contact-form input,.contact-form textarea{border:0;border-bottom:1px solid var(--c-line);border-radius:0;padding:.75rem 0;background:transparent;color:var(--c-ink);transition:border-color .18s}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--c-primary);outline:none}
+.contact-form button[type="submit"]{background:var(--c-primary);color:var(--c-on-primary);border-radius:0;padding:1rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;transition:opacity .2s}
+.contact-form button[type="submit"]:hover{opacity:.85}
+.map-embed{margin-top:1.25rem;aspect-ratio:16/9;overflow:hidden;outline:1px solid var(--c-line)}
+.map-embed iframe{width:100%;height:100%;border:0}
+
+/* Footer */
+.vi-footer{background:var(--c-bg);border-top:1px solid var(--c-line);padding:clamp(2rem,4vw,3rem) 0}
+.vi-footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.vi-footer strong{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:.08em;text-transform:uppercase;color:var(--c-ink)}
+.vi-footer p{font-size:.8rem;color:var(--c-ink-2);margin-top:.2rem}
+.social-links{display:flex;gap:.5rem}
+.social-links a{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--c-line);border-radius:0;color:var(--c-ink-2);transition:border-color .18s,color .18s}
+.social-links a:hover{border-color:var(--c-primary);color:var(--c-primary)}
+.social-links svg{width:16px;height:16px}`;
+}
+
+function vividBody(project: SiteProject): string {
+  const image = firstImage(project);
+  const services = servicesList(project.content.services);
+  const steps = processSteps(project);
+  const testimonials = testimonialsList(project.content.testimonials);
+  const featureItems = features(project);
+  const tickerItems = ['Free trial', project.business.name, 'Join now', 'Limited spots', project.business.name, 'Get started'];
+
+  return `
+    <header class="vi-header" id="top" data-header>
+      <div class="container vi-header__inner">
+        ${logoOrName(project)}
+        <button type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span></span></button>
+        <nav id="primary-nav" data-nav data-open="false" aria-label="Primary">
+          <ul>
+            <li><a href="#services">Services</a></li>
+            ${steps.length ? '<li><a href="#process">Process</a></li>' : ''}
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="cta cta--primary" href="#contact">Get started</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="vi-hero" aria-labelledby="hero-title">
+        <div class="vi-hero__bg">${image ? imgTag(image, { loading: 'eager' }) : ''}</div>
+        <div class="container vi-hero__inner">
+          <p class="vi-kicker">${escapeHtml(project.seo.cityRegion || industryLabel(project))}</p>
+          <h1 id="hero-title">${escapeHtml(project.business.name)}</h1>
+          <p class="vi-hero__sub">${escapeHtml(project.business.tagline)}</p>
+          <div class="vi-hero__ctas">
+            <a class="cta cta--primary" href="#contact">Join now</a>
+            <a class="cta cta--ghost" href="#services">What we offer</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="vi-ticker" aria-hidden="true">
+        <div class="vi-ticker__inner">
+          ${[...tickerItems, ...tickerItems].map((t) => `<span class="vi-ticker__item">${escapeHtml(t)}</span>`).join('')}
+        </div>
+      </div>
+
+      <section class="vi-services" id="services" aria-labelledby="services-title">
+        <div class="container">
+          <div style="display:grid;gap:1rem;margin-bottom:clamp(2rem,4vw,3.5rem)" data-reveal>
+            <p class="vi-kicker">What we offer</p>
+            <h2 id="services-title">Services</h2>
+          </div>
+        </div>
+        <div style="max-width:var(--max);margin-inline:auto;padding-inline:clamp(1.5rem,5vw,4rem)*0">
+          <div class="vi-services__grid">
+            ${services.map((s, i) => `
+              <article class="vi-service" data-reveal data-delay="${i * 55}">
+                <h3>${escapeHtml(s.name)}</h3>
+                <p>${escapeHtml(s.description)}</p>
+                ${s.price ? `<span class="vi-service__price">${escapeHtml(s.price)}</span>` : ''}
+              </article>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      ${featureItems.length ? `
+      <section class="vi-about" aria-labelledby="about-title">
+        <div class="container vi-about__grid">
+          ${image ? `<div class="vi-about__image" data-reveal="left">${imgTag(image)}</div>` : ''}
+          <div data-reveal="right">
+            <p class="vi-kicker">About us</p>
+            <h2 id="about-title">${escapeHtml(project.business.name)}</h2>
+            <p class="vi-about__lead">${escapeHtml(project.content.about)}</p>
+            ${featureItems.map((f) => `
+              <div class="vi-feature">
+                <h3>${escapeHtml(f.title)}</h3>
+                <p>${escapeHtml(f.description)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${steps.length ? `
+      <section class="vi-process" id="process" aria-labelledby="process-title">
+        <div class="container">
+          <div style="margin-bottom:clamp(2rem,4vw,3.5rem)" data-reveal>
+            <p class="vi-kicker">How it works</p>
+            <h2 id="process-title">The process</h2>
+          </div>
+          <div class="vi-process__grid">
+            ${steps.map((s, i) => `
+              <article class="vi-card" data-reveal data-delay="${i * 70}">
+                <div class="vi-card__num">${String(i + 1).padStart(2, '0')}</div>
+                <h3>${escapeHtml(s.title)}</h3>
+                <p>${escapeHtml(s.description)}</p>
+              </article>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${testimonials.length ? `
+      <section class="vi-testimonials" aria-label="Reviews">
+        <div class="container">
+          <div style="margin-bottom:clamp(2rem,4vw,3.5rem)" data-reveal>
+            <p class="vi-kicker">Reviews</p>
+            <h2>What people say</h2>
+          </div>
+          <div class="vi-testimonials__grid">
+            ${testimonials.map((t, i) => `
+              <article class="vi-testimonial" data-reveal data-delay="${i * 65}">
+                <p>"${escapeHtml(t.quote)}"</p>
+                <cite>${escapeHtml(t.customerName)}</cite>
+              </article>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      <section class="vi-contact" id="contact" aria-labelledby="contact-title">
+        <div class="container vi-contact__grid">
+          <div data-reveal="left">
+            <p class="vi-kicker">Contact</p>
+            <h2 id="contact-title" style="margin:.75rem 0 1.5rem">Let's talk</h2>
+            ${contactBlock(project)}
+            ${hoursList(project)}
+            ${mapEmbed(project)}
+          </div>
+          <div data-reveal="right">${netlifyFormFields(project)}</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="vi-footer">
+      <div class="container vi-footer__inner">
+        <div>
+          <strong>${escapeHtml(project.business.name)}</strong>
+          <p>© <span data-year>${new Date().getFullYear()}</span>. All rights reserved.</p>
+        </div>
+        <div>${socialLinks(project)}</div>
+      </div>
+    </footer>`;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HEARTH LOCAL
+   Concept: Warm artisan. Fraunces + Karla, cream and deep forest palette,
+   overlapping editorial imagery, community-rooted feel.
+════════════════════════════════════════════════════════════════════════════ */
+
+function hearthCss(project: SiteProject): string {
+  const primary = project.brand.primaryColor;
+  const onPrimary = readableOn(primary);
+  const primaryLight = tint(primary, 0.88);
+  const primaryDark = shade(primary, 0.18);
+  return `/* === Hearth Local ========================================== */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600&family=Karla:wght@400;500;600;700&display=swap");
+${visuallyHiddenCss()}
+:root{
+  --c-primary:${primary};
+  --c-primary-light:${primaryLight};
+  --c-primary-dark:${primaryDark};
+  --c-on-primary:${onPrimary};
+  --c-cream:#fdf6e8;
+  --c-paper:#f4e8cc;
+  --c-forest:#1b3326;
+  --c-bark:#3b2718;
+  --c-ink:#1e140a;
+  --c-ink-2:#6b5441;
+  --c-line:#dbc9a9;
+  --max:1140px;
+  --pad:clamp(1.5rem,4vw,3rem);
+  --sh:0 2px 6px rgba(27,51,38,.05),0 12px 36px rgba(27,51,38,.10);
+  --sh-lg:0 4px 10px rgba(27,51,38,.06),0 24px 70px rgba(27,51,38,.15);
+}
+body{font-family:"Karla",system-ui,sans-serif;background:var(--c-cream);color:var(--c-ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:"Fraunces",Georgia,serif;font-weight:600;letter-spacing:-.01em;line-height:.95}
+h3{font-family:"Karla",sans-serif;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+h1{font-size:clamp(3rem,8.5vw,8rem)}
+h2{font-size:clamp(2.2rem,5.5vw,5.5rem)}
+h3{font-size:clamp(1rem,1.4vw,1.15rem)}
+p{color:var(--c-ink-2);line-height:1.75}
+section{padding-block:clamp(4.5rem,9vw,8rem)}
+
+/* Header */
+.ht-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(253,246,232,.9);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid var(--c-line);
+  transition:background .3s,box-shadow .3s
+}
+.ht-header[data-scrolled="true"]{background:rgba(253,246,232,.98);box-shadow:0 1px 0 var(--c-line),0 8px 32px rgba(27,51,38,.07)}
+.ht-header__inner{height:78px;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.brand-mark{font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:1.3rem;letter-spacing:-.01em;color:var(--c-ink)}
+.brand-mark img{max-height:42px;width:auto}
+[data-nav]{display:none;position:fixed;inset:78px 0 auto 0;background:var(--c-cream);border-bottom:1px solid var(--c-line);padding:1.25rem var(--pad)}
+[data-nav][data-open="true"]{display:block}
+[data-nav] ul{display:grid;gap:.25rem}
+[data-nav] a{display:block;padding:.65rem 0;font-weight:600;color:var(--c-ink);border-bottom:1px solid var(--c-line)}
+@media(min-width:880px){
+  [data-nav]{display:block;position:static;padding:0;border:0;background:transparent}
+  [data-nav] ul{display:flex;gap:.25rem}
+  [data-nav] a{padding:.4rem .75rem;border:0;font-size:.875rem;color:var(--c-ink-2);letter-spacing:.02em}
+  [data-nav] a:hover{color:var(--c-ink)}
+}
+.cta--primary{background:var(--c-forest);color:#fff;border-radius:999px;letter-spacing:.02em}
+.cta--primary:hover{background:var(--c-bark)}
+.cta--ghost{border:1.5px solid var(--c-line);border-radius:999px;color:var(--c-ink)}
+.cta--ghost:hover{border-color:var(--c-ink)}
+.ht-header .cta--primary{padding:.6rem 1.4rem;font-size:.875rem}
+
+/* Kicker */
+.ht-kicker{display:inline-flex;align-items:center;gap:.65rem;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--c-primary)}
+.ht-kicker::before{content:"✦";font-size:.55rem;color:currentColor}
+
+/* Hero */
+.ht-hero{padding:0;background:var(--c-forest);position:relative;overflow:hidden;min-height:100svh;display:grid;align-items:end}
+.ht-hero__image{position:absolute;inset:0;z-index:0}
+.ht-hero__image img{width:100%;height:100%;object-fit:cover;opacity:.42;mix-blend-mode:luminosity}
+.ht-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(27,51,38,.2) 0%,rgba(27,51,38,.75) 65%,rgba(27,51,38,.95) 100%);z-index:1}
+.ht-hero__copy{
+  position:relative;z-index:2;
+  padding:clamp(3rem,7vw,6rem) var(--pad);
+  max-width:900px
+}
+.ht-hero .ht-kicker{color:rgba(255,255,255,.6)}
+.ht-hero .ht-kicker::before{color:rgba(255,255,255,.4)}
+.ht-hero h1{color:#fff;margin:.75rem 0 1.25rem;font-style:italic}
+.ht-hero__sub{font-size:clamp(1rem,1.4vw,1.2rem);max-width:50ch;color:rgba(255,255,255,.72)!important;margin-bottom:2rem}
+.ht-hero__ctas{display:flex;flex-wrap:wrap;gap:.875rem}
+.ht-hero .cta--primary{background:var(--c-primary);color:var(--c-on-primary);padding:.875rem 2rem;font-size:1rem}
+.ht-hero .cta--ghost{border-color:rgba(255,255,255,.3);color:#fff;padding:.875rem 1.75rem;font-size:1rem}
+.ht-hero .cta--ghost:hover{border-color:#fff}
+
+/* Menu / products */
+.ht-menu{background:var(--c-cream)}
+.ht-menu__grid{display:grid;gap:0}
+.ht-menu-item{
+  padding:1.5rem 0;border-bottom:1px solid var(--c-line);
+  display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:baseline
+}
+.ht-menu-item h3{font-family:"Fraunces",serif;font-size:clamp(1.2rem,1.8vw,1.6rem);font-weight:600;color:var(--c-ink);letter-spacing:0;line-height:1.1}
+.ht-menu-item__price{font-family:"Fraunces",serif;font-style:italic;font-size:1.15rem;color:var(--c-primary);white-space:nowrap}
+.ht-menu-item p{grid-column:1/-1;font-size:.9rem;margin-top:.35rem;color:var(--c-ink-2)}
+
+/* Story / about */
+.ht-story{background:var(--c-paper);overflow:hidden}
+.ht-story__grid{display:grid;gap:3rem}
+@media(min-width:900px){.ht-story__grid{grid-template-columns:1fr 1fr;align-items:center;gap:5rem}}
+.ht-story__image{
+  aspect-ratio:3/4;overflow:hidden;
+  border-radius:40% 40% 50% 50%;
+  box-shadow:var(--sh-lg);
+  position:relative
+}
+.ht-story__image img{width:100%;height:100%;object-fit:cover}
+.ht-story__image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(59,39,24,.2))}
+.ht-story h2{color:var(--c-ink);font-style:italic;margin:.75rem 0 1.25rem}
+.ht-feature{padding:.875rem 0;border-bottom:1px solid var(--c-line)}
+.ht-feature h3{color:var(--c-ink);margin-bottom:.35rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em}
+
+/* Gallery */
+.ht-gallery{background:var(--c-cream)}
+.ht-gallery__grid{
+  display:grid;gap:clamp(.75rem,1.5vw,1.25rem);
+  grid-template-columns:repeat(2,1fr)
+}
+@media(min-width:760px){
+  .ht-gallery__grid{grid-template-columns:repeat(4,1fr)}
+  .ht-gallery__grid figure:first-child{grid-column:span 2;grid-row:span 2}
+}
+.ht-gallery__grid figure{overflow:hidden;min-height:200px;border-radius:24px;box-shadow:var(--sh)}
+.ht-gallery__grid img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.ht-gallery__grid figure:hover img{transform:scale(1.06)}
+
+/* Testimonials */
+.ht-testimonials{background:var(--c-forest);color:#fff}
+.ht-testimonials h2{color:#fff}
+.ht-testimonials .ht-kicker{color:rgba(255,255,255,.5)}
+.ht-testimonials .ht-kicker::before{color:rgba(255,255,255,.3)}
+.ht-testimonials__grid{display:grid;gap:1.5rem;margin-top:2.5rem}
+@media(min-width:760px){.ht-testimonials__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1060px){.ht-testimonials__grid{grid-template-columns:repeat(3,1fr)}}
+.ht-testimonial{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:1.75rem}
+.ht-testimonial p{font-family:"Fraunces",serif;font-style:italic;font-size:1.1rem;line-height:1.55;color:rgba(255,255,255,.85)!important;margin-bottom:1rem}
+.ht-testimonial cite{display:block;font-style:normal;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+
+/* Contact */
+.ht-contact{background:var(--c-cream)}
+.ht-contact__grid{display:grid;gap:3rem}
+@media(min-width:900px){.ht-contact__grid{grid-template-columns:1fr 1fr;align-items:start}}
+.contact-line{display:flex;flex-direction:column;gap:.2rem;padding:.875rem 0;border-bottom:1px solid var(--c-line)}
+.contact-line strong{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--c-ink-2);font-weight:700}
+.contact-line span,.contact-line a{color:var(--c-ink);font-weight:500}
+.contact-line a:hover{color:var(--c-primary)}
+.hours-list{background:var(--c-paper);border:1px solid var(--c-line);border-radius:16px;padding:1.25rem;margin-top:1.25rem}
+.hours-row{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.9375rem}
+.hours-row__day{font-weight:600;color:var(--c-ink)}
+.hours-row__time{color:var(--c-ink-2)}
+.map-embed{margin-top:1.25rem;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--c-line)}
+.map-embed iframe{width:100%;height:100%;border:0}
+.contact-form{display:grid;gap:1.25rem;background:#fff;border-radius:24px;padding:2rem;box-shadow:var(--sh-lg);border:1px solid var(--c-line)}
+.contact-form__row{display:grid;gap:1.25rem}
+@media(min-width:640px){.contact-form__row{grid-template-columns:1fr 1fr}}
+.contact-form__field{display:grid;gap:.45rem}
+.contact-form__field span{font-size:.78rem;font-weight:700;color:var(--c-ink);letter-spacing:.06em;text-transform:uppercase}
+.contact-form input,.contact-form textarea{border:1px solid var(--c-line);border-radius:10px;padding:.8rem 1rem;background:var(--c-cream);color:var(--c-ink);font-size:.9375rem;transition:border-color .18s,box-shadow .18s}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--c-primary);box-shadow:0 0 0 4px ${primaryLight}66;outline:none}
+.contact-form button[type="submit"]{background:var(--c-forest);color:#fff;border-radius:999px;padding:1rem 2.25rem;font-size:.9375rem;font-weight:600;letter-spacing:.02em;transition:background .2s,transform .2s}
+.contact-form button[type="submit"]:hover{background:var(--c-bark);transform:translateY(-2px)}
+
+/* Footer */
+.ht-footer{background:var(--c-bark);color:rgba(255,255,255,.6);padding:clamp(2rem,4vw,3.5rem) 0}
+.ht-footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.ht-footer strong{font-family:"Fraunces",serif;font-size:1.2rem;font-style:italic;color:#fff}
+.ht-footer p{font-size:.8125rem;color:rgba(255,255,255,.35);margin-top:.2rem}
+.social-links{display:flex;gap:.5rem}
+.social-links a{display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.14);border-radius:999px;color:rgba(255,255,255,.5);transition:background .18s,color .18s}
+.social-links a:hover{background:rgba(255,255,255,.1);color:#fff}
+.social-links svg{width:16px;height:16px}`;
+}
+
+function hearthBody(project: SiteProject): string {
+  const image = firstImage(project);
+  const menuItems = products(project).length ? products(project) : servicesList(project.content.services);
+  const gallery = project.content.gallery;
+  const testimonials = testimonialsList(project.content.testimonials);
+  const featureItems = features(project);
+
+  return `
+    <header class="ht-header" id="top" data-header>
+      <div class="container ht-header__inner">
+        ${logoOrName(project)}
+        <button type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span></span></button>
+        <nav id="primary-nav" data-nav data-open="false" aria-label="Primary">
+          <ul>
+            <li><a href="#menu">Menu</a></li>
+            ${featureItems.length ? '<li><a href="#story">Our story</a></li>' : ''}
+            ${gallery.length ? '<li><a href="#gallery">Gallery</a></li>' : ''}
+            <li><a href="#contact">Visit</a></li>
+          </ul>
+        </nav>
+        <a class="cta cta--primary" href="#contact">Find us</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="ht-hero" aria-labelledby="hero-title">
+        <div class="ht-hero__image">${image ? imgTag(image, { loading: 'eager' }) : ''}</div>
+        <div class="container ht-hero__copy">
+          <p class="ht-kicker">${escapeHtml(project.seo.cityRegion || industryLabel(project))}</p>
+          <h1 id="hero-title">${escapeHtml(project.business.name)}</h1>
+          <p class="ht-hero__sub">${escapeHtml(project.business.tagline)}</p>
+          <div class="ht-hero__ctas">
+            <a class="cta cta--primary" href="#menu">See what's on</a>
+            <a class="cta cta--ghost" href="#contact">Find us</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="ht-menu" id="menu" aria-labelledby="menu-title">
+        <div class="container">
+          <div style="display:grid;gap:1rem;margin-bottom:2.5rem" data-reveal>
+            <p class="ht-kicker">What we make</p>
+            <h2 id="menu-title">The menu</h2>
+          </div>
+          <div class="ht-menu__grid">
+            ${menuItems.map((item, i) => `
+              <div class="ht-menu-item" data-reveal data-delay="${i * 50}">
+                <h3>${escapeHtml(item.name)}</h3>
+                ${item.price ? `<span class="ht-menu-item__price">${escapeHtml(item.price)}</span>` : ''}
+                <p>${escapeHtml(item.description)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      ${featureItems.length ? `
+      <section class="ht-story" id="story" aria-labelledby="story-title">
+        <div class="container ht-story__grid">
+          ${image ? `<div class="ht-story__image" data-reveal="left">${imgTag(image)}</div>` : ''}
+          <div data-reveal="right">
+            <p class="ht-kicker">Our story</p>
+            <h2 id="story-title">${escapeHtml(project.business.name)}</h2>
+            <p style="margin-bottom:1.5rem">${escapeHtml(project.content.about)}</p>
+            ${featureItems.map((f) => `
+              <div class="ht-feature">
+                <h3>${escapeHtml(f.title)}</h3>
+                <p>${escapeHtml(f.description)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${gallery.length ? `
+      <section class="ht-gallery" id="gallery" aria-labelledby="gallery-title">
+        <div class="container">
+          <div style="margin-bottom:2.5rem" data-reveal>
+            <p class="ht-kicker">Gallery</p>
+            <h2 id="gallery-title">Have a look</h2>
+          </div>
+          <div class="ht-gallery__grid" data-lightbox>
+            ${gallery.map((g) => `<figure>${imgTag(g)}</figure>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${testimonials.length ? `
+      <section class="ht-testimonials" aria-label="Reviews">
+        <div class="container">
+          <p class="ht-kicker" data-reveal="fade">What people say</p>
+          <h2 data-reveal style="margin-top:.75rem">Regulars &amp; guests</h2>
+          <div class="ht-testimonials__grid">
+            ${testimonials.map((t, i) => `
+              <article class="ht-testimonial" data-reveal data-delay="${i * 70}">
+                <p>"${escapeHtml(t.quote)}"</p>
+                <cite>${escapeHtml(t.customerName)}</cite>
+              </article>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      <section class="ht-contact" id="contact" aria-labelledby="contact-title">
+        <div class="container ht-contact__grid">
+          <div data-reveal="left">
+            <p class="ht-kicker">Come visit</p>
+            <h2 id="contact-title" style="margin:.75rem 0 1.5rem">Find us</h2>
+            ${contactBlock(project)}
+            ${hoursList(project)}
+            ${mapEmbed(project)}
+          </div>
+          <div data-reveal="right">${netlifyFormFields(project)}</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="ht-footer">
+      <div class="container ht-footer__inner">
+        <div>
+          <strong>${escapeHtml(project.business.name)}</strong>
+          <p>© <span data-year>${new Date().getFullYear()}</span>. All rights reserved.</p>
+        </div>
+        <div>${socialLinks(project)}</div>
+      </div>
+    </footer>`;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SLATE MINIMAL
+   Concept: Razor-precise minimalism. Raleway light/thin display, pure white
+   and charcoal, single accent color, whitespace as the primary design tool.
+════════════════════════════════════════════════════════════════════════════ */
+
+function slateCss(project: SiteProject): string {
+  const primary = project.brand.primaryColor;
+  const primaryLight = tint(primary, 0.9);
+  const primaryDark = shade(primary, 0.18);
+  return `/* === Slate Minimal ========================================= */
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&family=Inter:wght@400;500;600&display=swap");
+${visuallyHiddenCss()}
+:root{
+  --c-primary:${primary};
+  --c-primary-light:${primaryLight};
+  --c-primary-dark:${primaryDark};
+  --c-bg:#ffffff;
+  --c-bg-2:#f8f8f8;
+  --c-dark:#1a1a1c;
+  --c-ink:#1a1a1c;
+  --c-ink-2:#767680;
+  --c-line:#e8e8ec;
+  --max:1140px;
+  --pad:clamp(1.5rem,4vw,3.5rem);
+  --sh:0 1px 3px rgba(0,0,0,.03),0 8px 24px rgba(0,0,0,.07);
+  --sh-lg:0 2px 6px rgba(0,0,0,.03),0 20px 60px rgba(0,0,0,.11);
+}
+body{font-family:"Inter",system-ui,sans-serif;background:var(--c-bg);color:var(--c-ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:"Raleway",system-ui,sans-serif;font-weight:200;letter-spacing:.04em;line-height:1.02}
+h3{font-family:"Raleway",system-ui,sans-serif;font-weight:600;letter-spacing:.02em;line-height:1.2}
+h1{font-size:clamp(3rem,7.5vw,8rem)}
+h2{font-size:clamp(2.2rem,5vw,5.2rem)}
+h3{font-size:clamp(1rem,1.3vw,1.1rem)}
+p{color:var(--c-ink-2);line-height:1.78;font-size:.9375rem}
+section{padding-block:clamp(5rem,10vw,9rem)}
+
+/* Header */
+.sl-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  border-bottom:1px solid var(--c-line);
+  transition:background .3s,box-shadow .3s
+}
+.sl-header[data-scrolled="true"]{background:rgba(255,255,255,.97);box-shadow:0 1px 0 var(--c-line),0 8px 32px rgba(0,0,0,.05)}
+.sl-header__inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.brand-mark{font-family:"Raleway",sans-serif;font-weight:600;font-size:1.1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--c-ink)}
+.brand-mark img{max-height:36px;width:auto}
+[data-nav]{display:none;position:fixed;inset:76px 0 auto 0;background:#fff;border-bottom:1px solid var(--c-line);padding:1.25rem var(--pad)}
+[data-nav][data-open="true"]{display:block}
+[data-nav] ul{display:grid;gap:.25rem}
+[data-nav] a{display:block;padding:.6rem 0;font-size:1rem;font-weight:500;color:var(--c-ink);border-bottom:1px solid var(--c-line);letter-spacing:.04em}
+@media(min-width:880px){
+  [data-nav]{display:block;position:static;padding:0;border:0;background:transparent}
+  [data-nav] ul{display:flex;gap:0}
+  [data-nav] a{padding:.4rem .875rem;border:0;font-size:.82rem;color:var(--c-ink-2);letter-spacing:.08em;text-transform:uppercase}
+  [data-nav] a:hover{color:var(--c-ink)}
+}
+.cta--primary{background:var(--c-ink);color:#fff;border-radius:4px;letter-spacing:.06em;font-size:.82rem;text-transform:uppercase;font-weight:600}
+.cta--primary:hover{background:var(--c-dark);box-shadow:var(--sh)}
+.cta--ghost{border:1px solid var(--c-line);border-radius:4px;color:var(--c-ink);letter-spacing:.06em;font-size:.82rem;text-transform:uppercase;font-weight:600}
+.cta--ghost:hover{border-color:var(--c-ink)}
+.sl-header .cta--primary{padding:.6rem 1.35rem}
+
+/* Label */
+.sl-label{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--c-primary);display:flex;align-items:center;gap:.65rem}
+.sl-label::before{content:"";width:24px;height:1px;background:var(--c-primary);flex-shrink:0}
+
+/* Hero — text only, maximum whitespace */
+.sl-hero{
+  padding-top:clamp(6rem,12vw,10rem);
+  padding-bottom:clamp(4rem,8vw,7rem);
+  border-bottom:1px solid var(--c-line);
+  position:relative
+}
+.sl-hero::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--c-primary) 0%,transparent 40%)
+}
+.sl-hero__inner{display:grid;gap:3rem}
+@media(min-width:900px){.sl-hero__inner{grid-template-columns:1.2fr .8fr;align-items:end;gap:5rem}}
+.sl-hero h1{color:var(--c-ink);max-width:14ch}
+.sl-hero__meta{display:flex;flex-direction:column;gap:1.5rem;padding-bottom:.5rem}
+.sl-hero__meta p{font-size:1.05rem;max-width:36ch;color:var(--c-ink-2);line-height:1.75}
+.sl-hero__ctas{display:flex;flex-wrap:wrap;gap:.875rem}
+
+/* Services — table-style rows */
+.sl-services{background:var(--c-bg);border-bottom:1px solid var(--c-line)}
+.sl-services__intro{max-width:540px;margin-bottom:clamp(2.5rem,5vw,4.5rem)}
+.sl-service{
+  display:grid;grid-template-columns:1fr auto;gap:1.5rem;
+  padding:1.75rem 0;border-bottom:1px solid var(--c-line);
+  align-items:center;
+  transition:padding .2s,background .2s,border-radius .2s
+}
+.sl-service:hover{padding-left:1rem;padding-right:1rem;margin-inline:-1rem;border-radius:8px;background:var(--c-bg-2);border-bottom-color:transparent}
+.sl-service:last-child{border-bottom:0}
+.sl-service__left h3{color:var(--c-ink);margin-bottom:.35rem}
+.sl-service__left p{max-width:52ch;font-size:.9rem}
+.sl-service__price{
+  font-family:"Raleway",sans-serif;font-weight:300;
+  font-size:1.4rem;color:var(--c-primary);white-space:nowrap;letter-spacing:0
+}
+
+/* About */
+.sl-about{background:var(--c-bg-2);border-bottom:1px solid var(--c-line)}
+.sl-about__grid{display:grid;gap:4rem}
+@media(min-width:900px){.sl-about__grid{grid-template-columns:1fr 1fr;align-items:start;gap:6rem}}
+.sl-about__lead{
+  font-family:"Raleway",sans-serif;font-weight:300;
+  font-size:clamp(1.4rem,2.2vw,2.2rem);
+  line-height:1.32;color:var(--c-ink);letter-spacing:.01em
+}
+.sl-feature{padding:1.25rem 0;border-bottom:1px solid var(--c-line)}
+.sl-feature:last-child{border-bottom:0}
+.sl-feature h3{color:var(--c-ink);margin-bottom:.35rem;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* Credentials */
+.sl-proof{background:var(--c-bg);border-bottom:1px solid var(--c-line)}
+.sl-proof__grid{display:grid;gap:0;border-top:1px solid var(--c-line)}
+@media(min-width:640px){.sl-proof__grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1060px){.sl-proof__grid{grid-template-columns:repeat(4,1fr)}}
+.sl-stat{padding:2rem;border-right:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
+.sl-stat:nth-child(2n){border-right:0}
+@media(min-width:1060px){.sl-stat:nth-child(2n){border-right:1px solid var(--c-line)}.sl-stat:nth-child(4n){border-right:0}}
+.sl-stat strong{
+  display:block;font-family:"Raleway",sans-serif;font-weight:200;
+  font-size:clamp(2.5rem,4vw,4rem);letter-spacing:-.01em;
+  color:var(--c-primary);margin-bottom:.5rem;line-height:1
+}
+.sl-stat p{font-size:.85rem;color:var(--c-ink-2);line-height:1.55;margin:0}
+
+/* Gallery */
+.sl-gallery{background:var(--c-bg-2);border-bottom:1px solid var(--c-line)}
+.sl-gallery__grid{
+  display:grid;gap:clamp(.75rem,1.5vw,1.25rem);
+  grid-template-columns:repeat(2,1fr)
+}
+@media(min-width:760px){
+  .sl-gallery__grid{grid-template-columns:repeat(3,1fr)}
+  .sl-gallery__grid figure:first-child{grid-column:span 2}
+}
+.sl-gallery__grid figure{overflow:hidden;min-height:260px;border-radius:4px}
+.sl-gallery__grid img{width:100%;height:100%;object-fit:cover;filter:saturate(.9);transition:transform .6s ease,filter .5s ease}
+.sl-gallery__grid figure:hover img{transform:scale(1.05);filter:saturate(1)}
+
+/* FAQs */
+.sl-faqs{background:var(--c-bg);border-bottom:1px solid var(--c-line)}
+.sl-faqs__grid{display:grid;gap:3rem}
+@media(min-width:900px){.sl-faqs__grid{grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start}}
+details{border-bottom:1px solid var(--c-line);padding:1.25rem 0}
+details:first-child{border-top:1px solid var(--c-line)}
+summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;color:var(--c-ink);font-size:.9375rem;letter-spacing:.01em}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1rem;font-weight:300;flex-shrink:0;color:var(--c-ink-2);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin-top:.875rem;font-size:.9rem;line-height:1.72}
+
+/* Contact */
+.sl-contact{background:var(--c-bg-2)}
+.sl-contact__grid{display:grid;gap:3rem}
+@media(min-width:900px){.sl-contact__grid{grid-template-columns:1fr 1fr;align-items:start;gap:5rem}}
+.contact-line{display:flex;flex-direction:column;gap:.2rem;padding:.875rem 0;border-bottom:1px solid var(--c-line)}
+.contact-line strong{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--c-ink-2);font-weight:600}
+.contact-line span,.contact-line a{color:var(--c-ink);font-weight:500}
+.contact-line a:hover{color:var(--c-primary)}
+.hours-list{background:#fff;border:1px solid var(--c-line);border-radius:8px;padding:1.25rem;margin-top:1.25rem}
+.hours-row{display:flex;justify-content:space-between;padding:.4rem 0;font-size:.9375rem}
+.hours-row__day{font-weight:500;color:var(--c-ink)}
+.hours-row__time{color:var(--c-ink-2)}
+.map-embed{margin-top:1.25rem;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:1px solid var(--c-line)}
+.map-embed iframe{width:100%;height:100%;border:0}
+.contact-form{display:grid;gap:1.25rem;background:#fff;border-radius:8px;padding:2rem;box-shadow:var(--sh-lg);border:1px solid var(--c-line)}
+.contact-form__row{display:grid;gap:1.25rem}
+@media(min-width:640px){.contact-form__row{grid-template-columns:1fr 1fr}}
+.contact-form__field{display:grid;gap:.4rem}
+.contact-form__field span{font-size:.72rem;font-weight:600;color:var(--c-ink);letter-spacing:.1em;text-transform:uppercase}
+.contact-form input,.contact-form textarea{border:1px solid var(--c-line);border-radius:4px;padding:.8rem 1rem;background:#fff;color:var(--c-ink);font-size:.9375rem;transition:border-color .18s,box-shadow .18s}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--c-primary);box-shadow:0 0 0 3px ${primaryLight}77;outline:none}
+.contact-form button[type="submit"]{background:var(--c-ink);color:#fff;border-radius:4px;padding:1rem 2rem;font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;transition:background .2s,transform .2s}
+.contact-form button[type="submit"]:hover{background:var(--c-dark);transform:translateY(-1px)}
+
+/* Footer */
+.sl-footer{background:var(--c-dark);color:rgba(255,255,255,.5);padding:clamp(2rem,4vw,3rem) 0;border-top:1px solid var(--c-line)}
+.sl-footer__inner{display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.sl-footer strong{font-family:"Raleway",sans-serif;font-weight:600;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.sl-footer p{font-size:.78rem;color:rgba(255,255,255,.3);margin-top:.2rem}
+.social-links{display:flex;gap:.5rem}
+.social-links a{display:grid;place-items:center;width:38px;height:38px;border:1px solid rgba(255,255,255,.1);border-radius:4px;color:rgba(255,255,255,.4);transition:background .18s,color .18s,border-color .18s}
+.social-links a:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.2)}
+.social-links svg{width:15px;height:15px}`;
+}
+
+function slateBody(project: SiteProject): string {
+  const services = servicesList(project.content.services);
+  const gallery = project.content.gallery;
+  const proof = credentials(project);
+  const faqItems = faqs(project);
+  const featureItems = features(project);
+  const testimonials = testimonialsList(project.content.testimonials);
+
+  return `
+    <header class="sl-header" id="top" data-header>
+      <div class="container sl-header__inner">
+        ${logoOrName(project)}
+        <button type="button" data-nav-toggle aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span></span></button>
+        <nav id="primary-nav" data-nav data-open="false" aria-label="Primary">
+          <ul>
+            <li><a href="#services">Services</a></li>
+            ${proof.length ? '<li><a href="#proof">Credentials</a></li>' : ''}
+            ${faqItems.length ? '<li><a href="#faqs">FAQs</a></li>' : ''}
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <a class="cta cta--primary" href="#contact">Get in touch</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="sl-hero" aria-labelledby="hero-title">
+        <div class="container sl-hero__inner">
+          <div>
+            <p class="sl-label">${escapeHtml(project.seo.cityRegion || industryLabel(project))}</p>
+            <h1 id="hero-title" style="margin-top:1.25rem">${escapeHtml(project.business.name)}</h1>
+          </div>
+          <div class="sl-hero__meta">
+            <p>${escapeHtml(project.business.tagline)}</p>
+            ${project.content.about ? `<p>${escapeHtml(project.content.about)}</p>` : ''}
+            <div class="sl-hero__ctas">
+              <a class="cta cta--primary" href="#contact">Start a conversation</a>
+              <a class="cta cta--ghost" href="#services">Our services</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sl-services" id="services" aria-labelledby="services-title">
+        <div class="container">
+          <div class="sl-services__intro" data-reveal>
+            <p class="sl-label">Services</p>
+            <h2 id="services-title" style="margin-top:1.25rem">What we do</h2>
+          </div>
+          <div>
+            ${services.map((s, i) => `
+              <div class="sl-service" data-reveal data-delay="${i * 55}">
+                <div class="sl-service__left">
+                  <h3>${escapeHtml(s.name)}</h3>
+                  <p>${escapeHtml(s.description)}</p>
+                </div>
+                ${s.price ? `<span class="sl-service__price">${escapeHtml(s.price)}</span>` : ''}
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>
+
+      ${featureItems.length ? `
+      <section class="sl-about" aria-labelledby="about-title">
+        <div class="container sl-about__grid">
+          <div data-reveal="left">
+            <p class="sl-label">About</p>
+            <p class="sl-about__lead" style="margin-top:1.25rem">${escapeHtml(project.content.about)}</p>
+          </div>
+          <div data-reveal="right">
+            ${featureItems.map((f) => `
+              <div class="sl-feature">
+                <h3>${escapeHtml(f.title)}</h3>
+                <p>${escapeHtml(f.description)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${proof.length ? `
+      <section class="sl-proof" id="proof" aria-labelledby="proof-title">
+        <div class="container">
+          <div style="margin-bottom:clamp(2.5rem,5vw,4.5rem)" data-reveal>
+            <p class="sl-label">Credentials</p>
+            <h2 id="proof-title" style="margin-top:1.25rem">The numbers</h2>
+          </div>
+          <div class="sl-proof__grid">
+            ${proof.map((p, i) => `
+              <div class="sl-stat" data-reveal data-delay="${i * 60}">
+                <strong>${escapeHtml(p.label)}</strong>
+                <p>${escapeHtml(p.detail)}</p>
+              </div>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${gallery.length ? `
+      <section class="sl-gallery" aria-labelledby="gallery-title">
+        <div class="container">
+          <div style="margin-bottom:clamp(2.5rem,5vw,4.5rem)" data-reveal>
+            <p class="sl-label">Work</p>
+            <h2 id="gallery-title" style="margin-top:1.25rem">Selected projects</h2>
+          </div>
+          <div class="sl-gallery__grid" data-lightbox>
+            ${gallery.map((g) => `<figure>${imgTag(g)}</figure>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${testimonials.length ? `
+      <section style="border-bottom:1px solid var(--c-line)" aria-label="Reviews">
+        <div class="container">
+          <div style="max-width:720px;margin-inline:auto;text-align:center">
+            <p class="sl-label" style="justify-content:center" data-reveal="fade">Reviews</p>
+            ${testimonials.slice(0, 2).map((t, i) => `
+              <blockquote style="margin-top:${i === 0 ? '2rem' : '3rem'};padding-top:${i > 0 ? '3rem' : '0'};${i > 0 ? 'border-top:1px solid var(--c-line);' : ''}" data-reveal data-delay="${i * 80}">
+                <p style="font-family:Raleway,sans-serif;font-weight:300;font-size:clamp(1.2rem,2.2vw,1.8rem);line-height:1.4;letter-spacing:.01em;color:var(--c-ink)">
+                  "${escapeHtml(t.quote)}"
+                </p>
+                <cite style="display:block;margin-top:1rem;font-style:normal;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--c-primary)">${escapeHtml(t.customerName)}</cite>
+              </blockquote>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      ${faqItems.length ? `
+      <section class="sl-faqs" id="faqs" aria-labelledby="faqs-title">
+        <div class="container sl-faqs__grid">
+          <div data-reveal="left">
+            <p class="sl-label">FAQs</p>
+            <h2 id="faqs-title" style="margin-top:1.25rem">Common questions</h2>
+          </div>
+          <div data-reveal="right">
+            ${faqItems.map((f) => `
+              <details>
+                <summary>${escapeHtml(f.question)}</summary>
+                <p>${escapeHtml(f.answer)}</p>
+              </details>`).join('')}
+          </div>
+        </div>
+      </section>` : ''}
+
+      <section class="sl-contact" id="contact" aria-labelledby="contact-title">
+        <div class="container sl-contact__grid">
+          <div data-reveal="left">
+            <p class="sl-label">Contact</p>
+            <h2 id="contact-title" style="margin-top:1.25rem;margin-bottom:2rem">Let's work together</h2>
+            ${contactBlock(project)}
+            ${hoursList(project)}
+            ${mapEmbed(project)}
+          </div>
+          <div data-reveal="right">${netlifyFormFields(project)}</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="sl-footer">
+      <div class="container sl-footer__inner">
+        <div>
+          <strong>${escapeHtml(project.business.name)}</strong>
+          <p>© <span data-year>${new Date().getFullYear()}</span>. All rights reserved.</p>
+        </div>
+        <div>${socialLinks(project)}</div>
+      </div>
+    </footer>`;
 }

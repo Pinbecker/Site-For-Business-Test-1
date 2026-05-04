@@ -5,9 +5,13 @@ import { minifyCss, minifyJs } from './minify';
 import { renderHead, renderRobots, renderSitemap, deriveOgImage, imagePath } from './seo';
 import {
   TEMPLATE_EXPERT,
+  TEMPLATE_HEARTH,
   TEMPLATE_HOSPITALITY,
+  TEMPLATE_LUMINA,
   TEMPLATE_PORTFOLIO,
   TEMPLATE_SERVICE_PRO,
+  TEMPLATE_SLATE,
+  TEMPLATE_VIVID,
 } from '@/templates/realTemplates';
 
 export interface TemplateModule {
@@ -23,6 +27,10 @@ export const TEMPLATES: Record<TemplateId, TemplateModule> = {
   'hospitality-editorial': TEMPLATE_HOSPITALITY,
   'portfolio-studio': TEMPLATE_PORTFOLIO,
   'expert-firm': TEMPLATE_EXPERT,
+  'lumina-wellness': TEMPLATE_LUMINA,
+  'vivid-bold': TEMPLATE_VIVID,
+  'hearth-local': TEMPLATE_HEARTH,
+  'slate-minimal': TEMPLATE_SLATE,
 };
 
 export const TEMPLATE_LIST: TemplateMeta[] = Object.values(TEMPLATES).map((t) => t.meta);
