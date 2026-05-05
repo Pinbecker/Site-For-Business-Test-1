@@ -75,6 +75,9 @@ export async function buildZip(project: SiteProject): Promise<Blob> {
     zip.file(path, dataUrlToBlob(a.dataUrl));
   }
 
+  // _redirects: ensures Netlify serves index.html for the root after form success redirects.
+  zip.file('_redirects', '/ /index.html 200\n');
+
   // Netlify forms manifest — Netlify auto-detects forms in HTML, but we add a
   // brief notes file to make it obvious where the form lives.
   zip.file('NOTES.md', NOTES_MD(project));

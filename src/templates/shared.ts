@@ -20,7 +20,7 @@ export function imgTag(asset: ImageAsset, opts: { className?: string; sizes?: st
 export function netlifyFormFields(project: SiteProject): string {
   const formName = `contact-${project.id.slice(0, 8)}`;
   return `
-        <form name="${escapeAttr(formName)}" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form">
+        <form name="${escapeAttr(formName)}" method="POST" action="/?success=true" netlify data-netlify="true" netlify-honeypot="bot-field" class="contact-form">
           <input type="hidden" name="form-name" value="${escapeAttr(formName)}" />
           <p class="visually-hidden" aria-hidden="true">
             <label>Don’t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>

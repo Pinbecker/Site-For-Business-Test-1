@@ -126,5 +126,18 @@ export const CLIENT_JS = `(function(){
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = String(new Date().getFullYear());
 
+  /* ── Form success banner ── */
+  if (window.location.search.indexOf('success=true') !== -1) {
+    var banner = document.createElement('div');
+    banner.className = 'sf-success-banner';
+    banner.setAttribute('role', 'status');
+    banner.innerHTML =
+      '<span>&#10003; Message sent &mdash; we\'ll be in touch soon.</span>' +
+      '<button type="button" aria-label="Dismiss" onclick="this.parentNode.remove()" style="background:none;border:none;cursor:pointer;font-size:1.1rem;color:inherit;padding:0 0 0 .75rem">&times;</button>';
+    document.body.prepend(banner);
+    history.replaceState(null, '', window.location.pathname);
+    setTimeout(function () { if (banner.parentNode) banner.remove(); }, 6000);
+  }
+
 })();
 `;

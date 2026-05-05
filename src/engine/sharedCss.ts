@@ -57,6 +57,10 @@ section{position:relative;scroll-margin-top:5rem}
 [data-reveal="scale"]{transform:translateY(12px) scale(.97)}
 [data-reveal][data-revealed="true"]{opacity:1;transform:none}
 
+/* ---------- Form success banner ---------- */
+.sf-success-banner{position:fixed;top:0;left:0;right:0;z-index:10000;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.875rem 1.25rem;background:#16a34a;color:#fff;font-weight:500;font-size:.9375rem;box-shadow:0 2px 12px rgba(0,0,0,.18);animation:sf-slide-down .3s cubic-bezier(.22,.68,0,1.2)}
+@keyframes sf-slide-down{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
 /* ---------- Lightbox ---------- */
 .sf-lightbox{position:fixed;inset:0;background:rgba(5,7,12,.96);display:none;align-items:center;justify-content:center;z-index:9999;padding:1.25rem}
 .sf-lightbox[data-open="true"]{display:flex}
