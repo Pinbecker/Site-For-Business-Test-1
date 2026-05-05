@@ -1,6 +1,6 @@
 import type { SiteProject, TemplateId } from '@/types/project';
 import { SCHEMA_VERSION } from '@/types/project';
-import { defaultProject } from './defaults';
+import { defaultProject, defaultTemplateConfig } from './defaults';
 
 const LEGACY_TEMPLATE_TO_NEW: Record<string, TemplateId> = {
   'classic-trade': 'service-pro',
@@ -25,6 +25,10 @@ export function hydrateProject(input: SiteProject): SiteProject {
     ...input,
     schemaVersion: SCHEMA_VERSION,
     templateId,
+    templateConfig: {
+      ...defaultTemplateConfig(),
+      ...input.templateConfig,
+    },
     project: {
       ...fallback.project,
       customerName: input.project?.customerName || input.business?.name || fallback.project.customerName,
@@ -51,7 +55,11 @@ function normalizeTemplateId(value: string): TemplateId {
     value === 'service-pro' ||
     value === 'hospitality-editorial' ||
     value === 'portfolio-studio' ||
-    value === 'expert-firm'
+    value === 'expert-firm' ||
+    value === 'lumina-wellness' ||
+    value === 'vivid-bold' ||
+    value === 'hearth-local' ||
+    value === 'slate-minimal'
   ) {
     return value;
   }

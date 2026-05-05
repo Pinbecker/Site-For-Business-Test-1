@@ -211,6 +211,18 @@ export type TemplateId =
   | 'hearth-local'
   | 'slate-minimal';
 
+export type SpacingConfig = 'compact' | 'default' | 'airy';
+export type ShapeConfig = 'sharp' | 'default' | 'generous';
+export type ButtonConfig = 'square' | 'default' | 'pill';
+export type HeadingConfig = 'light' | 'default' | 'heavy';
+
+export interface TemplateConfig {
+  spacing: SpacingConfig;
+  shape: ShapeConfig;
+  buttons: ButtonConfig;
+  headings: HeadingConfig;
+}
+
 export interface RandomizationSeed {
   /** Numeric seed used by the templates' deterministic randomizer. */
   seed: number;
@@ -224,6 +236,7 @@ export interface SiteProject {
   project: ProjectMeta;
   templateId: TemplateId;
   randomization: RandomizationSeed;
+  templateConfig: TemplateConfig;
   business: BusinessInfo;
   brand: Brand;
   content: Content;

@@ -3,7 +3,7 @@
  * all templates. Each template still owns its own HTML structure.
  */
 
-import type { ImageAsset, ServiceItem, SiteProject, Testimonial } from '@/types/project';
+import type { ButtonConfig, HeadingConfig, ImageAsset, ServiceItem, ShapeConfig, SiteProject, SpacingConfig, TemplateConfig, Testimonial } from '@/types/project';
 import { escapeAttr, escapeHtml } from '@/engine/escape';
 import { formatHours, mailtoHref, telHref } from '@/engine/format';
 import { imagePath } from '@/engine/seo';
@@ -122,6 +122,67 @@ export function logoOrName(project: SiteProject, opts: { className?: string } = 
       </a>`;
   }
   return `<a href="#top" class="${escapeAttr(cls)}">${escapeHtml(project.business.name)}</a>`;
+}
+
+export function resolveConfig(config: TemplateConfig): string {
+  const parts: string[] = [];
+
+  // ── Spacing ──────────────────────────────────────────────────────────────
+  const padMap: Record<SpacingConfig, string | null> = {
+    compact: 'clamp(2.5rem,5vw,3.5rem)',
+    default: null,
+    airy: 'clamp(6rem,12vw,10rem)',
+  };
+  const pad = padMap[config.spacing];
+  if (pad) {
+    // Target all sections except template hero sections which intentionally use padding:0
+    parts.push(
+      `section:not(.sp-hero):not(.he-hero):not(.ps-hero):not(.lw-hero):not(.vi-hero):not(.ht-hero):not(.sl-hero){padding-block:${pad}!important}`,
+    );
+  }
+
+  // ── Shape ─────────────────────────────────────────────────────────────────
+  const rMap: Record<ShapeConfig, string | null> = { sharp: '0px', default: null, generous: '24px' };
+  const rLgMap: Record<ShapeConfig, string | null> = { sharp: '0px', default: null, generous: '40px' };
+  const r = rMap[config.shape];
+  const rLg = rLgMap[config.shape];
+  if (r !== null) {
+    // Cards, service tiles, feature blocks, quote cards, contact form
+    const cardSel = [
+      '.sp-service,.sp-feature,.sp-process-step,.sp-quote-card,.sp-team-member',
+      '.he-feature,.he-testimonial',
+      '.ef-service,.ef-credential',
+      '.lw-service,.lw-team-member',
+      '.vi-service,.vi-stat',
+      '.ht-service,.ht-feature',
+      '.sl-stat,.sl-feature',
+      '.contact-form',
+    ].join(',');
+    parts.push(`${cardSel}{border-radius:${r}!important}`);
+  }
+  if (rLg !== null) {
+    // Larger image/map containers
+    const containerSel = '.sp-hero__panel,.map-embed iframe,.ps-contact__inner';
+    parts.push(`${containerSel}{border-radius:${rLg}!important}`);
+  }
+
+  // ── Buttons ───────────────────────────────────────────────────────────────
+  const btnMap: Record<ButtonConfig, string | null> = { square: '0px', default: null, pill: '999px' };
+  const btnR = btnMap[config.buttons];
+  if (btnR !== null) {
+    parts.push(
+      `.cta,.cta--primary,.cta--outline,.cta--ghost,.cta--secondary,.btn,.btn-primary,.btn-secondary{border-radius:${btnR}!important}`,
+    );
+  }
+
+  // ── Headings ──────────────────────────────────────────────────────────────
+  const hwMap: Record<HeadingConfig, string | null> = { light: '300', default: null, heavy: '900' };
+  const hw = hwMap[config.headings];
+  if (hw !== null) {
+    parts.push(`h1,h2{font-weight:${hw}!important}`);
+  }
+
+  return parts.join('');
 }
 
 export function mapEmbed(project: SiteProject): string {

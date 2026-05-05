@@ -1,4 +1,4 @@
-import type { SiteProject, TemplateId } from '@/types/project';
+import type { ButtonConfig, HeadingConfig, ShapeConfig, SiteProject, SpacingConfig, TemplateConfig, TemplateId } from '@/types/project';
 import { TEMPLATE_LIST, suggestTemplate } from '@/engine/render';
 import { SectionShell } from '../components/SectionShell';
 
@@ -6,10 +6,12 @@ interface Props {
   project: SiteProject;
   selectTemplate: (id: TemplateId) => void;
   reshuffle: () => void;
+  updateConfig: (patch: Partial<TemplateConfig>) => void;
 }
 
-export function TemplateSection({ project, selectTemplate, reshuffle }: Props) {
+export function TemplateSection({ project, selectTemplate, reshuffle, updateConfig }: Props) {
   const suggested = suggestTemplate(project.business.industry);
+  const cfg = project.templateConfig;
 
   return (
     <SectionShell
@@ -57,6 +59,50 @@ export function TemplateSection({ project, selectTemplate, reshuffle }: Props) {
         })}
       </div>
 
+      <div className="grid gap-3 rounded-xl bg-ink-50 p-4 ring-1 ring-ink-100">
+        <p className="text-sm font-semibold text-ink-900">Style tweaks</p>
+        <ConfigRow
+          label="Spacing"
+          value={cfg.spacing}
+          options={[
+            { value: 'compact', label: 'Compact' },
+            { value: 'default', label: 'Default' },
+            { value: 'airy', label: 'Airy' },
+          ]}
+          onChange={(v) => updateConfig({ spacing: v as SpacingConfig })}
+        />
+        <ConfigRow
+          label="Shape"
+          value={cfg.shape}
+          options={[
+            { value: 'sharp', label: 'Sharp' },
+            { value: 'default', label: 'Default' },
+            { value: 'generous', label: 'Rounded' },
+          ]}
+          onChange={(v) => updateConfig({ shape: v as ShapeConfig })}
+        />
+        <ConfigRow
+          label="Buttons"
+          value={cfg.buttons}
+          options={[
+            { value: 'square', label: 'Square' },
+            { value: 'default', label: 'Default' },
+            { value: 'pill', label: 'Pill' },
+          ]}
+          onChange={(v) => updateConfig({ buttons: v as ButtonConfig })}
+        />
+        <ConfigRow
+          label="Headings"
+          value={cfg.headings}
+          options={[
+            { value: 'light', label: 'Light' },
+            { value: 'default', label: 'Default' },
+            { value: 'heavy', label: 'Heavy' },
+          ]}
+          onChange={(v) => updateConfig({ headings: v as HeadingConfig })}
+        />
+      </div>
+
       <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-ink-50 p-3 ring-1 ring-ink-100">
         <div>
           <p className="text-sm font-medium text-ink-900">Variation seed</p>
@@ -69,6 +115,40 @@ export function TemplateSection({ project, selectTemplate, reshuffle }: Props) {
         </button>
       </div>
     </SectionShell>
+  );
+}
+
+function ConfigRow({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: Array<{ value: string; label: string }>;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="min-w-[5rem] text-xs font-medium text-ink-700">{label}</span>
+      <span className="flex gap-1">
+        {options.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            onClick={() => onChange(o.value)}
+            className={`rounded-md px-3 py-1 text-xs font-medium transition ${
+              value === o.value
+                ? 'bg-ink-900 text-white'
+                : 'bg-white text-ink-600 ring-1 ring-ink-200 hover:ring-ink-300'
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </span>
+    </div>
   );
 }
 

@@ -9,6 +9,7 @@ import type {
   ServiceItem,
   SiteProject,
   TeamMember,
+  TemplateConfig,
   Testimonial,
 } from '@/types/project';
 import { DAYS_ORDER, SCHEMA_VERSION } from '@/types/project';
@@ -63,6 +64,10 @@ export function newAreaServed(): AreaServed {
   return { id: newId('are'), name: '' };
 }
 
+export function defaultTemplateConfig(): TemplateConfig {
+  return { spacing: 'default', shape: 'default', buttons: 'default', headings: 'default' };
+}
+
 export function defaultProject(): SiteProject {
   const now = new Date().toISOString();
   return {
@@ -78,6 +83,7 @@ export function defaultProject(): SiteProject {
     },
     templateId: 'service-pro',
     randomization: { seed: newSeed() },
+    templateConfig: defaultTemplateConfig(),
     business: {
       name: 'Acme Local',
       tagline: 'Trusted local service for your home and business.',

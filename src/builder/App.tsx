@@ -249,6 +249,7 @@ export function App() {
                   project={project}
                   selectTemplate={selectTemplate}
                   reshuffle={reshuffle}
+                  updateConfig={(patch) => update('templateConfig', patch)}
                 />
               ) : null}
               <div className="flex items-center justify-between pt-2 text-xs text-ink-500">

@@ -13,6 +13,7 @@ import {
   TEMPLATE_SLATE,
   TEMPLATE_VIVID,
 } from '@/templates/realTemplates';
+import { resolveConfig } from '@/templates/shared';
 
 export interface TemplateModule {
   meta: TemplateMeta;
@@ -66,7 +67,8 @@ export function renderSite(project: SiteProject): RenderedSite {
   const tpl = TEMPLATES[project.templateId] ?? TEMPLATES['service-pro'];
   const og = deriveOgImage(project);
 
-  const css = SHARED_CSS + '\n' + tpl.css(project);
+  const configCss = resolveConfig(project.templateConfig);
+  const css = SHARED_CSS + '\n' + tpl.css(project) + (configCss ? '\n/* === Template config overrides */\n' + configCss : '');
   const js = CLIENT_JS;
 
   const head = renderHead(project, { ogImagePath: og.path });
