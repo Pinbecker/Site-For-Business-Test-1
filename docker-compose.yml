@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    image: site-for-business:latest
+    container_name: site-for-business
+    ports:
+      - "80:80"
+    restart: unless-stopped
